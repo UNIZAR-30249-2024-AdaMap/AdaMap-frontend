@@ -16,3 +16,18 @@ export const NavBarItems = [
     href: '/map'
   }
 ]
+
+export const tipoUso = [
+  {
+    title: 'Docencia',
+    value: 'docencia'
+  },
+  {
+    title: 'Investigación',
+    value: 'investigacion'
+  },
+  {
+    title: 'Gestión',
+    value: 'gestion'
+  }
+]
