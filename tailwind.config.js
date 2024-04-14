@@ -15,11 +15,13 @@ module.exports = {
       screens: {
         "2xl": "1400px",
       },
-    },
+    },        
     extend: {
+      
       colors: {
         custom: {
           AdaMapBlue: "#86B3CC",
+          AdaMapBlueDark: "#134778",
         },
         border: "hsl(var(--border))",
         input: "hsl(var(--input))",
