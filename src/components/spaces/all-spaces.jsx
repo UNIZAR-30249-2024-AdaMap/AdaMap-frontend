@@ -35,7 +35,7 @@ const spacesData = [
     reservable: true
   },
   {
-    id: "Laboratorio 1.02",
+    id: "Laboratorio 1.03",
     edificio: "Ada Byron",
     categoria: "Laboratorio",
     planta: "1",
@@ -46,7 +46,7 @@ const spacesData = [
     reservable: false
   },
   {
-    id: "Laboratorio 1.02",
+    id: "Laboratorio 1.04",
     edificio: "Ada Byron",
     categoria: "Laboratorio",
     planta: "1",
@@ -107,7 +107,7 @@ export function AllSpaces() {
             <Separator />
             <div className="p-4  grid gap-2">
               {space.reservable &&
-                (<DialogReserva id={space.id} aforo={space.aforo} />)
+                (<DialogReserva index={index} idNombre={space.id} aforo={space.aforo} />)
               }
               <Button className={cn(buttonVariants({ variant: 'adaMap' }), 'w-full')}>Mapa</Button>
             </div>
