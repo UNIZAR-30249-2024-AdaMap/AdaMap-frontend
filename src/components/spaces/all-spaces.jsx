@@ -10,7 +10,6 @@ import { Input } from "@/components/ui/input"
 import Link from 'next/link'
 import { DialogReserva } from "@/components/spaces/reserve-dialog"
 
-// Datos simulados de los espacios
 const spacesData = [
   {
     id: "Laboratorio 1.02",
@@ -83,7 +82,7 @@ export function AllSpaces() {
             onChange={handleSearchChange}
           />
           <Link
-              href={'/sign-in'}
+              href={'/spaces'}
               className={cn(buttonVariants({ variant: 'adaMap' }), 'ml-4 px-7'
               )}>
               Filtrar

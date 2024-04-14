@@ -25,14 +25,13 @@ import { Textarea } from "@/components/ui/textarea"
 
 export function DialogReserva({
   index,
-  idNombre
+  idNombre,
 }) {
 
   const handleSubmit = async (e) => {
-    console.log('Reserva hecha')
-  }
-
-
+    console.log('Reserva hecha');
+  };
+  
   return (
     <Dialog key={index}>
       <DialogTrigger asChild>
@@ -108,10 +107,9 @@ export function DialogReserva({
             </div>
           </div>
           <DialogFooter className="mt-3">
-            <Button type="submit" className={buttonVariants({ variant: 'adaMap' })}>Save changes</Button>
+            <Button type="submit" className={buttonVariants({ variant: 'adaMap' })}>Reservar</Button>
           </DialogFooter>
         </form>
-
       </DialogContent>
     </Dialog>
   )
