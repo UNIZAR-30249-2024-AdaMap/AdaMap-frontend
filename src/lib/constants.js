@@ -65,9 +65,5 @@ export const Planta = [
   {
     title: 'Planta 4', 
     value: 'planta-4'
-  },
-  {
-    title: 'Planta 5', 
-    value: 'planta-5'
   }
 ]
