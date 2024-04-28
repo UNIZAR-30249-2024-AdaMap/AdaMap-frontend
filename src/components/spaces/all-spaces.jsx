@@ -9,6 +9,7 @@ import { LuSearch } from "react-icons/lu"
 import { Input } from "@/components/ui/input"
 import Link from 'next/link'
 import { DialogReserva } from "@/components/spaces/reserve-dialog"
+import { DialogReservaVariosEspacios } from "@/components/spaces/reserve-various-spaces-dialog"
 
 const spacesData = [
   {
@@ -59,34 +60,37 @@ const spacesData = [
 ];
 
 export function AllSpaces() {
-    const [searchTerm, setSearchTerm] = useState('')
+  const [searchTerm, setSearchTerm] = useState('')
 
 
-  const filteredSpaces = spacesData.filter(spacesData => { 
+  const filteredSpaces = spacesData.filter(spacesData => {
     return spacesData.id.toLowerCase().includes(searchTerm.toLowerCase())
   });
 
-  const handleSearchChange = (e) => { 
+  const handleSearchChange = (e) => {
     setSearchTerm(e.target.value);
   };
 
   return (
     <div>
       <div className="mb-4 ">
-        <div className="flex items-center max-w-lg">
-          <LuSearch className="w-6 h-6 mr-2 text-gray-500" />
-          <Input
-            placeholder="Busca el espacio"
-            className="text-base"
-            value={searchTerm}
-            onChange={handleSearchChange}
-          />
-          <Link
+        <div className="flex items-center justify-between">
+          <div className="flex items-center">
+            <LuSearch className="w-10 h-10 mr-2 text-gray-500" />
+            <Input
+              placeholder="Busca el espacio"
+              className="text-base"
+              value={searchTerm}
+              onChange={handleSearchChange}
+            />
+            <Link
               href={'/spaces'}
               className={cn(buttonVariants({ variant: 'adaMap' }), 'ml-4 px-7'
               )}>
               Filtrar
             </Link>
+          </div>
+          <DialogReservaVariosEspacios />
         </div>
 
       </div>
