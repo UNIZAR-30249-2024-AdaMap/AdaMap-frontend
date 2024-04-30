@@ -1,6 +1,6 @@
 export const NavBarItems = [
   {
-    title: 'Modificar Resercas & Espacios',
+    title: 'Modificar Reservas & Espacios',
     href: '/modify-reservations-spaces'
   },
   {
@@ -14,5 +14,9 @@ export const NavBarItems = [
   {
     title: 'Mapa',
     href: '/map'
+  },
+  {
+    title: 'Reservas',
+    href: '/reservations'
   }
 ]

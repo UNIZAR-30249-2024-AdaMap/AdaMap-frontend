@@ -1,0 +1,10 @@
+{
+  "/page": "app/page.js",
+  "/favicon.ico/route": "app/favicon.ico/route.js",
+  "/(logged)/spaces/page": "app/(logged)/spaces/page.js",
+  "/(logged)/modify-reservations-spaces/page": "app/(logged)/modify-reservations-spaces/page.js",
+  "/sign-in/page": "app/sign-in/page.js",
+  "/(logged)/my-reservations/page": "app/(logged)/my-reservations/page.js",
+  "/(logged)/reservations/page": "app/(logged)/reservations/page.js",
+  "/(logged)/map/page": "app/(logged)/map/page.js"
+}
