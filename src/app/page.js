@@ -25,9 +25,11 @@ export default function InitPage() {
               Reserva de una manera fácil y cómoda los espacios del edificio Ada Byron.
             </p>
             <Link
-            href={'/sign-in'}
-            className={cn(buttonVariants({ variant: 'adaMap' }),'w-full'
-            )}>Comenzar</Link>
+              href={'/sign-in'}
+              className={cn(buttonVariants({ variant: 'adaMap' }),'w-full'
+              )}>
+              Comenzar
+            </Link>
           </div>
           <div className="w-full md:w-1/3 px-4">
             <Image 

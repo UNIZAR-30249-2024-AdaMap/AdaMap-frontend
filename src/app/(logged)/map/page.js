@@ -1,8 +1,10 @@
 
-export default function MapPage() {
+import { AdaMap } from '@/components/map/AdaMap'
+
+export default function AdaMapPage() {
   return (
-    <div className="flex flex-row">
+    <div className="">
+      <AdaMap />
     </div>
-    
   );
 }
