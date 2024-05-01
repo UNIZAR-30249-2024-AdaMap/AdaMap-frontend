@@ -33,10 +33,6 @@ export const tipoUso = [
   {
     title: 'Gestión',
     value: 'gestion'
-  },
-  {
-    title: 'Buscar & Filtrar',
-    href: '/filters'
   }
 ]
 

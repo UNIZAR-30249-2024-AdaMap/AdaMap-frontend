@@ -4,9 +4,42 @@ import { Input } from "@/components/ui/input"
 import { TableHead, TableRow, TableHeader, TableCell, TableBody, Table } from "@/components/ui/table"
 import { Button } from "@/components/ui/button"
 import { LuSearch, LuTrash, LuClipboardEdit } from "react-icons/lu"
+import { DialogEditReserva } from "@/components/reservations/edit-dialog"
 
+const reservationsData = [
+  {
+    id: "Sala de Juntas 1",
+    usuario: "jdoe@empresa.com",
+    fecha: "2023-04-15",
+    horaInicio: "09:00",
+    horaFin: "11:00",
+    aforo: "10",
+    tipoUso: "Reunión",
+    descripcion: "Reunión del equipo de ventas"
+  },
+  {
+    id: "Auditorio Principal",
+    usuario: "mgarcia@empres.com",
+    fecha: "2023-04-20",
+    horaInicio: "14:00",
+    horaFin: "16:00",
+    aforo: "50",
+    tipoUso: "Conferencia",
+    descripcion: "Conferencia de lanzamiento de producto"
+  },
+  {
+    id: "Sala de Capacitación",
+    usuario: "jsmith@empresa.com",
+    fecha: "2023-04-25",
+    horaInicio: "08:30",
+    horaFin: "12:30",
+    aforo: "20",
+    tipoUso: "Capacitación",
+    descripcion: "Capacitación de nuevos empleados"
+  }
+]
 
-export function AllReservations() {
+export function AllReservations({ rol }) {
   const [searchTerm, setSearchTerm] = useState('')
 
   const handleSearchChange = (e) => { 
@@ -42,72 +75,28 @@ export function AllReservations() {
             </TableRow>
           </TableHeader>
           <TableBody>
-            <TableRow>
-              <TableCell>Sala de Juntas 1</TableCell>
-              <TableCell>jdoe@empresa.com</TableCell>
-              <TableCell>2023-04-15</TableCell>
-              <TableCell>09:00</TableCell>
-              <TableCell>11:00</TableCell>
-              <TableCell>10</TableCell>
-              <TableCell>Reunión</TableCell>
-              <TableCell>Reunión del equipo de ventas</TableCell>
-              <TableCell>
-                <div className="flex items-center gap-2">
-                  <Button size="icon" variant="ghost">
-                    <LuClipboardEdit className="h-4 w-4" />
-                    <span className="sr-only">Editar</span>
-                  </Button>
-                  <Button className="text-red-500 hover:text-red-600" size="icon" variant="ghost">
-                    <LuTrash className="h-4 w-4" />
-                    <span className="sr-only">Eliminar</span>
-                  </Button>
-                </div>
-              </TableCell>
-            </TableRow>
-            <TableRow>
-              <TableCell>Auditorio Principal</TableCell>
-              <TableCell>mgarcia@empresa.com</TableCell>
-              <TableCell>2023-04-20</TableCell>
-              <TableCell>14:00</TableCell>
-              <TableCell>16:00</TableCell>
-              <TableCell>50</TableCell>
-              <TableCell>Conferencia</TableCell>
-              <TableCell>Conferencia de lanzamiento de producto</TableCell>
-              <TableCell>
-                <div className="flex items-center gap-2">
-                  <Button size="icon" variant="ghost">
-                    <LuClipboardEdit className="h-4 w-4" />
-                    <span className="sr-only">Editar</span>
-                  </Button>
-                  <Button className="text-red-500 hover:text-red-600" size="icon" variant="ghost">
-                    <LuTrash className="h-4 w-4" />
-                    <span className="sr-only">Eliminar</span>
-                  </Button>
-                </div>
-              </TableCell>
-            </TableRow>
-            <TableRow>
-              <TableCell>Sala de Capacitación</TableCell>
-              <TableCell>jsmith@empresa.com</TableCell>
-              <TableCell>2023-04-25</TableCell>
-              <TableCell>08:30</TableCell>
-              <TableCell>12:30</TableCell>
-              <TableCell>20</TableCell>
-              <TableCell>Capacitación</TableCell>
-              <TableCell>Capacitación de nuevos empleados</TableCell>
-              <TableCell>
-                <div className="flex items-center gap-2">
-                  <Button size="icon" variant="ghost">
-                    <LuClipboardEdit className="h-4 w-4" />
-                    <span className="sr-only">Editar</span>
-                  </Button>
-                  <Button className="text-red-500 hover:text-red-600" size="icon" variant="ghost">
-                    <LuTrash className="h-4 w-4" />
-                    <span className="sr-only">Eliminar</span>
-                  </Button>
-                </div>
-              </TableCell>
-            </TableRow>
+            {reservationsData.map((reservation, index) => (
+                <TableRow key={index}>
+                  <TableCell>{reservation.id}</TableCell>
+                  <TableCell>{reservation.usuario}</TableCell>
+                  <TableCell>{reservation.fecha}</TableCell>
+                  <TableCell>{reservation.horaInicio}</TableCell>
+                  <TableCell>{reservation.horaFin}</TableCell>
+                  <TableCell>{reservation.aforo}</TableCell>
+                  <TableCell>{reservation.tipoUso}</TableCell>
+                  <TableCell>{reservation.descripcion}</TableCell>
+                  <TableCell>
+                    <div className="flex items-center gap-2">
+                      <DialogEditReserva index={index} idNombre={reservation.id} aforo={reservation.aforo} />
+                      <Button className="text-red-500 hover:text-red-600" size="icon" variant="ghost">
+                        <LuTrash className="h-4 w-4" />
+                        <span className="sr-only">Eliminar</span>
+                      </Button>
+                    </div>
+                  </TableCell>
+                </TableRow>
+              ))}
+            
           </TableBody>
         </Table>
       </div>

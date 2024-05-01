@@ -84,7 +84,7 @@ export function AllSpaces() {
               onChange={handleSearchChange}
             />
             <Link
-              href={'/spaces'}
+              href={'/filters'}
               className={cn(buttonVariants({ variant: 'adaMap' }), 'ml-4 px-7'
               )}>
               Filtrar

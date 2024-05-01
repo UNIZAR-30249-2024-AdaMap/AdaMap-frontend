@@ -31,25 +31,35 @@
       "static/chunks/main-app.js",
       "static/chunks/app/(logged)/layout.js"
     ],
-    "/(logged)/modify-reservations-spaces/page": [
+    "/(logged)/filters/page": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
-      "static/chunks/app/(logged)/modify-reservations-spaces/page.js"
+      "static/chunks/app/(logged)/filters/page.js"
+    ],
+    "/(logged)/reservations/page": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/chunks/app/(logged)/reservations/page.js"
     ],
     "/(logged)/my-reservations/page": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
       "static/chunks/app/(logged)/my-reservations/page.js"
     ],
+    "/(logged)/modify-reservations-spaces/page": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/chunks/app/(logged)/modify-reservations-spaces/page.js"
+    ],
     "/(logged)/map/page": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
       "static/chunks/app/(logged)/map/page.js"
     ],
-    "/(logged)/reservations/page": [
+    "/(logged)/spaces-gerente/page": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
-      "static/chunks/app/(logged)/reservations/page.js"
+      "static/chunks/app/(logged)/spaces-gerente/page.js"
     ]
   }
 }

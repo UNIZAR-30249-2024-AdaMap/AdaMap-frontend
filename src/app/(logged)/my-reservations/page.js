@@ -1,4 +1,6 @@
 
+import { MyReservations } from "@/components/my-reservations/my-reservations"
+
 const rol = "Gerente"
 
 export default function MyReservationsPage() {
@@ -14,7 +16,7 @@ export default function MyReservationsPage() {
         </p>
       </div>
       <div className="mt-10">
-        
+        <MyReservations/>
       </div>
     </div>
   );

@@ -21,7 +21,7 @@ export function ModifyRS() {
         <Separator className="mt-60"/>
         <div className="p-4 grid gap-2">
           <Link
-            href={'/reservation-gerente'}
+            href={'/reservations'}
             className={cn(buttonVariants({ variant: 'adaMap' }), 'w-full')
             }>
             Reservas
@@ -36,7 +36,7 @@ export function ModifyRS() {
         <Separator className="mt-60"/>
         <div className="p-4 grid gap-2">
           <Link
-            href={'/reservation-gerente'}
+            href={'/spaces-gerente'}
             className={cn(buttonVariants({ variant: 'adaMap' }), 'w-full')
             }>
             Espacios
