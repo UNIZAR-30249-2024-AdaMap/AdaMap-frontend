@@ -5,7 +5,7 @@ import { Input } from "@/components/ui/input"
 import { TableHead, TableRow, TableHeader, TableCell, TableBody, Table } from "@/components/ui/table"
 import { Button } from "@/components/ui/button"
 import { LuSearch, LuTrash, LuClipboardEdit } from "react-icons/lu"
-//import { DialogEditReserva } from "@/components/spaces/edit-dialog"
+import { DialogEditSpace } from "@/components/spaces-gerente/edit-space"
 
 const spacesData = [
   {
@@ -17,6 +17,7 @@ const spacesData = [
     horario: "L-D 8:00-20:00",
     propietario: "DIIS",
     aforo: "50",
+    porcentaje: "100%",
     reservable: true
   },
   {
@@ -28,6 +29,7 @@ const spacesData = [
     horario: "L-D 8:00-20:00",
     propietario: "DIIS",
     aforo: "50",
+    porcentaje: "100%",
     reservable: true
   },
   {
@@ -39,6 +41,7 @@ const spacesData = [
     horario: "L-D 8:00-20:00",
     propietario: "DIIS",
     aforo: "50",
+    porcentaje: "100%",
     reservable: false
   },
   {
@@ -50,15 +53,20 @@ const spacesData = [
     horario: "L-D 8:00-20:00",
     propietario: "DIIS",
     aforo: "50",
+    porcentaje: "50%",
     reservable: true
-  },
-
-]
+  }
+];
 
 export function SpacesGerente() {
   const [searchTerm, setSearchTerm] = useState('')
 
-  const handleSearchChange = (e) => { 
+
+  const filteredSpaces = spacesData.filter(spacesData => {
+    return spacesData.id.toLowerCase().includes(searchTerm.toLowerCase())
+  });
+
+  const handleSearchChange = (e) => {
     setSearchTerm(e.target.value);
   };
 
@@ -69,7 +77,7 @@ export function SpacesGerente() {
           <LuSearch className="absolute left-3 top-3 h-4 w-4 text-gray-500 dark:text-gray-400" />
           <Input
             className="w-full bg-white dark:bg-gray-950 shadow-none appearance-none pl-8 pr-4 py-2 rounded-md"
-            placeholder="Busca la reserva"
+            placeholder="Busca el espacio por nombre de espacio"
             value={searchTerm}
             onChange={handleSearchChange}
           />
@@ -87,12 +95,13 @@ export function SpacesGerente() {
               <TableHead>Horario</TableHead>
               <TableHead>Propietario</TableHead>
               <TableHead>Aforo</TableHead>
+              <TableHead>Porcentaje</TableHead>
               <TableHead>Reservable</TableHead>
               <TableHead className="w-[100px]">Acciones</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
-          {spacesData.map((space, index) => (
+            {filteredSpaces.map((space, index) => (
                 <TableRow key={index}>
                   <TableCell>{space.id}</TableCell>
                   <TableCell>{space.edificio}</TableCell>
@@ -102,10 +111,11 @@ export function SpacesGerente() {
                   <TableCell>{space.horario}</TableCell>
                   <TableCell>{space.propietario}</TableCell>
                   <TableCell>{space.aforo}</TableCell>
+                  <TableCell>{space.porcentaje}</TableCell>
                   <TableCell>{space.reservable ? "Sí" : "No"}</TableCell>
                   <TableCell>
                     <div className="flex items-center gap-2">
-                      <DialogEditReserva index={index} idNombre={space.id} aforo={space.aforo} />
+                      <DialogEditSpace index={index} idNombre={space.id}/>
                       <Button className="text-red-500 hover:text-red-600" size="icon" variant="ghost">
                         <LuTrash className="h-4 w-4" />
                         <span className="sr-only">Eliminar</span>

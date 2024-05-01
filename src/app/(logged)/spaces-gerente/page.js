@@ -1,4 +1,4 @@
-import SpacesGerente from "@/components/spaces-gerente/spaces-gerente";
+import { SpacesGerente } from "@/components/spaces-gerente/spaces-gerente";
 
 const rol = "Gerente"
 

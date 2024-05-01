@@ -8,7 +8,8 @@ import { DialogEditReserva } from "@/components/reservations/edit-dialog"
 
 const reservationsData = [
   {
-    id: "Sala de Juntas 1",
+    id: "1",
+    nombre: "Sala de Juntas 1",
     usuario: "jdoe@empresa.com",
     fecha: "2023-04-15",
     horaInicio: "09:00",
@@ -18,7 +19,8 @@ const reservationsData = [
     descripcion: "Reunión del equipo de ventas"
   },
   {
-    id: "Auditorio Principal",
+    id: "2",
+    nombre: "Auditorio Principal",
     usuario: "mgarcia@empres.com",
     fecha: "2023-04-20",
     horaInicio: "14:00",
@@ -28,7 +30,8 @@ const reservationsData = [
     descripcion: "Conferencia de lanzamiento de producto"
   },
   {
-    id: "Sala de Capacitación",
+    id: "3",
+    nombre: "Sala de Capacitación",
     usuario: "jsmith@empresa.com",
     fecha: "2023-04-25",
     horaInicio: "08:30",
@@ -42,7 +45,12 @@ const reservationsData = [
 export function AllReservations({ rol }) {
   const [searchTerm, setSearchTerm] = useState('')
 
-  const handleSearchChange = (e) => { 
+
+  const filteredSpaces = reservationsData.filter(reservationsData => {
+    return reservationsData.usuario.toLowerCase().includes(searchTerm.toLowerCase())
+  });
+
+  const handleSearchChange = (e) => {
     setSearchTerm(e.target.value);
   };
 
@@ -53,7 +61,7 @@ export function AllReservations({ rol }) {
           <LuSearch className="absolute left-3 top-3 h-4 w-4 text-gray-500 dark:text-gray-400" />
           <Input
             className="w-full bg-white dark:bg-gray-950 shadow-none appearance-none pl-8 pr-4 py-2 rounded-md"
-            placeholder="Busca la reserva"
+            placeholder="Busca la reserva por usuario"
             value={searchTerm}
             onChange={handleSearchChange}
           />
@@ -63,6 +71,7 @@ export function AllReservations({ rol }) {
         <Table>
           <TableHeader>
             <TableRow>
+              <TableHead>Id</TableHead>
               <TableHead>Espacio</TableHead>
               <TableHead>Usuario</TableHead>
               <TableHead>Fecha</TableHead>
@@ -75,9 +84,10 @@ export function AllReservations({ rol }) {
             </TableRow>
           </TableHeader>
           <TableBody>
-            {reservationsData.map((reservation, index) => (
+            {filteredSpaces.map((reservation, index) => (
                 <TableRow key={index}>
                   <TableCell>{reservation.id}</TableCell>
+                  <TableCell>{reservation.nombre}</TableCell>
                   <TableCell>{reservation.usuario}</TableCell>
                   <TableCell>{reservation.fecha}</TableCell>
                   <TableCell>{reservation.horaInicio}</TableCell>
@@ -87,7 +97,6 @@ export function AllReservations({ rol }) {
                   <TableCell>{reservation.descripcion}</TableCell>
                   <TableCell>
                     <div className="flex items-center gap-2">
-                      <DialogEditReserva index={index} idNombre={reservation.id} aforo={reservation.aforo} />
                       <Button className="text-red-500 hover:text-red-600" size="icon" variant="ghost">
                         <LuTrash className="h-4 w-4" />
                         <span className="sr-only">Eliminar</span>

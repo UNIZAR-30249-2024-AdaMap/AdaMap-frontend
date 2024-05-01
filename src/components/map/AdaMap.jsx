@@ -32,11 +32,11 @@ export function AdaMap() {
         <div className="lg:w-1/4 mb-4 lg:mb-0 flex flex-col space-y-2">
           <Select>
             <SelectTrigger >
-              <SelectValue placeholder="Seleciona el tipo de uso" />
+              <SelectValue placeholder="Seleciona la planta" />
             </SelectTrigger>
             <SelectContent>
               <SelectGroup>
-                {Category.map((uso, index) => (
+                {Planta.map((uso, index) => (
                   <SelectItem
                     key={index}
                     value={uso.value}
@@ -65,8 +65,14 @@ export function AdaMap() {
           </div>
         </div>
         
-        <div className="w-1/2">
-          <Image src="/assets/logoLABIS.png" alt="Map" layout="responsive" width="200" height="200" />
+        <div className="w-full lg:w-3/4 flex justify-center lg:justify-end">
+          <Image 
+            src="/assets/logoLABIS.png" 
+            alt="Map" 
+            layout="responsive" 
+            width={500} 
+            height={250} 
+          />
         </div>
       </div>
     </div>

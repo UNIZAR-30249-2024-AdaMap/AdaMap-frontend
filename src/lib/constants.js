@@ -14,10 +14,6 @@ export const NavBarItems = [
   {
     title: 'Mapa',
     href: '/map'
-  },
-  {
-    title: 'Reservas',
-    href: '/reservations'
   }
 ]
 
@@ -80,5 +76,28 @@ export const Planta = [
   {
     title: 'Planta 4', 
     value: 'planta-4'
+  }
+]
+
+export const Propietarios = [
+  {
+    title: 'DIIS', 
+    value: 'diis'
+  },
+  {
+    title: 'DIEC', 
+    value: 'diec'
+  },
+  {
+    title: 'EINA', 
+    value: 'eina'
+  },
+  {
+    title: 'Investigador contratado', 
+    value: 'investigador-contratado'
+  },
+  {
+    title: 'Docente investigador', 
+    value: 'docente-investigador'
   }
 ]
