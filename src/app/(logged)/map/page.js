@@ -1,9 +1,17 @@
+"use client"
 
-import { AdaMap } from '@/components/map/AdaMap'
+import dynamic from 'next/dynamic'
 
 export default function AdaMapPage() {
+
+  const AdaMap = dynamic(() => import('@/components/map/AdaMap'), {
+    loading: () => <p>A map is loading</p>,
+    ssr: false
+  });
+
+
   return (
-    <div className="">
+    <div >
       <AdaMap />
     </div>
   );

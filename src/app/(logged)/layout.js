@@ -4,7 +4,7 @@ export default function RootLayout({ children, params }) {
   return (
     <div>
       <Layout />
-      <div className="pt-24 ">
+      <div className="pt-24">
         {children}
       </div>
     </div>
