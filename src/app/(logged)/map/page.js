@@ -1,6 +1,7 @@
 "use client"
 
 import dynamic from 'next/dynamic'
+import React from 'react'
 
 export default function AdaMapPage() {
 
@@ -11,7 +12,7 @@ export default function AdaMapPage() {
 
 
   return (
-    <div >
+    <div className=''>
       <AdaMap />
     </div>
   );

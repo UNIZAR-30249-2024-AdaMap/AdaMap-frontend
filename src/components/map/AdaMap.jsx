@@ -1,80 +1,139 @@
-'use client'
+"use client";
 
-import { useState } from 'react'
-import Image from 'next/image'
-import Link from 'next/link'
-import { Category, Planta } from '@/lib/constants'
-import {
-  Select,
-  SelectContent,
-  SelectGroup,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select"
+import { MapContainer, Marker, TileLayer, Tooltip, Popup, LayersControl, LayerGroup, Circle, FeatureGroup, Rectangle } from "react-leaflet"
+import "leaflet/dist/leaflet.css"
+import "leaflet-defaulticon-compatibility"
+import "leaflet-defaulticon-compatibility/dist/leaflet-defaulticon-compatibility.css"
+import { useState } from "react"
+import L from "leaflet"
 
-export function AdaMap() {
-  const [selectedFloor, setSelectedFloor] = useState('PRIMERA PLANTA');
+export default function AdaMap() {
+  const [selectedFloor, setSelectedFloor] = useState("PRIMERA PLANTA");
   const [selectedSpace, setSelectedSpace] = useState(null);
 
-  // Replace with actual data
+  /*Replace with actual data
   const spaces = [
-    { id: 'Laboratorio 1.02', type: 'Laboratorio', details: 'Some details...' },
+    { id: "Laboratorio 1.02", type: "Laboratorio", details: "Some details..." },
   ];
 
   const selectSpace = (space) => {
     setSelectedSpace(space);
   };
 
+  var map = L.map("mapid", {
+    center: [41.68351342770779, -0.8886556704770172],
+    zoom: 19,
+    maxZoom: 20,
+    maxNativeZoom: 19,
+  });
+
+  L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
+    maxZoom: 21,
+    attribution:
+      '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+  }).addTo(map);
+
+  var planta0 = L.tileLayer.wms(
+    "http://localhost:8080/geoserver/proyecto/wms",
+    {
+      layers: "proyecto:espacios_eina_planta0",
+      format: "image/png",
+      transparent: true,
+    }
+  );
+
+  var planta1 = L.tileLayer.wms(
+    "http://localhost:8080/geoserver/proyecto/wms",
+    {
+      layers: "proyecto:espacios_eina_planta1",
+      format: "image/png",
+      transparent: true,
+    }
+  );
+
+  var planta2 = L.tileLayer.wms(
+    "http://localhost:8080/geoserver/proyecto/wms",
+    {
+      layers: "proyecto:espacios_eina_planta2",
+      format: "image/png",
+      transparent: true,
+    }
+  );
+
+  var planta3 = L.tileLayer.wms(
+    "http://localhost:8080/geoserver/proyecto/wms",
+    {
+      layers: "proyecto:espacios_eina_planta3",
+      format: "image/png",
+      transparent: true,
+    }
+  );
+
+  var planta4 = L.tileLayer.wms(
+    "http://localhost:8080/geoserver/proyecto/wms",
+    {
+      layers: "proyecto:espacios_eina_planta4",
+      format: "image/png",
+      transparent: true,
+    }
+  );
+
+  var basePlantas = {
+    "Planta 0": planta0,
+    "Planta 1": planta1,
+    "Planta 2": planta2,
+    "Planta 3": planta3,
+    "Planta 4": planta4,
+  };
+
+  L.control.layers(basePlantas).addTo(map);*/
+
   return (
-    <div className="">
-      <div className="flex flex-col lg:flex-row justify-between p-4">
-        <div className="lg:w-1/4 mb-4 lg:mb-0 flex flex-col space-y-2">
-          <Select>
-            <SelectTrigger >
-              <SelectValue placeholder="Seleciona la planta" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectGroup>
-                {Planta.map((uso, index) => (
-                  <SelectItem
-                    key={index}
-                    value={uso.value}
-                    onSelect={(value) => console.log(value)}
-                  >{uso.title}</SelectItem>
-                ))}
-              </SelectGroup>
-            </SelectContent>
-          </Select>
-          <div className="flex flex-col rounded-lg border overflow-hidden shadow-sm p-4 "> 
-            {Category.map((category, index) => (
-              <p key={index}>
-                {category.title}
-              </p>
-            ))}
-          </div>
-          <div className="flex flex-col rounded-lg border overflow-hidden shadow-sm p-4"> 
-            {selectedSpace ? (
-              <>
-                <h2 className="font-bold text-xl mb-2">{selectedSpace.id}</h2>
-                <p className="text-gray-700">{selectedSpace.details}</p>
-              </>
-            ) : (
-              <p className="text-gray-700">Selecciona un espacio para mostrar su información.</p>
-            )}
-          </div>
-        </div>
-        
-        <div className="w-full lg:w-3/4 flex justify-center lg:justify-end">
-          <Image 
-            src="/assets/logoLABIS.png" 
-            alt="Map" 
-            layout="responsive" 
-            width={500} 
-            height={250} 
-          />
-        </div>
-      </div>
+    <div>
+      <MapContainer center={[41.68351342770779, -0.8886556704770172]} zoom={20} scrollWheelZoom={false}
+        style={{ height: "88vh", width: "100%" }}>
+        <TileLayer
+          attribution='<a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+          url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+        />
+        <LayersControl position="topright">
+          <LayersControl.Overlay name="Marker with popup">
+            <Marker position={[41.68351342770779, -0.8886556704770172]}>
+              <Popup>
+                A pretty CSS3 popup. <br /> Easily customizable.
+              </Popup>
+            </Marker>
+          </LayersControl.Overlay>
+          <LayersControl.Overlay checked name="Layer group with circles">
+            <LayerGroup>
+              <Circle
+                center={[41.68351342770779, -0.8886556704770172]}
+                pathOptions={{ fillColor: 'blue' }}
+                radius={200}
+              />
+              <Circle
+                center={[41.68351342770779, -0.8886556704770172]}
+                pathOptions={{ fillColor: 'red' }}
+                radius={100}
+                stroke={false}
+              />
+              <LayerGroup>
+                <Circle
+                  center={[41.68351342770779, -0.8886556704770172]}
+                  pathOptions={{ color: 'green', fillColor: 'green' }}
+                  radius={100}
+                />
+              </LayerGroup>
+            </LayerGroup>
+          </LayersControl.Overlay>
+          <LayersControl.Overlay name="Feature group">
+            <FeatureGroup pathOptions={{ color: 'purple' }}>
+              <Popup>Popup in FeatureGroup</Popup>
+              <Circle center={[41.68351342770779, -0.8886556704770172]} radius={200} />
+            </FeatureGroup>
+          </LayersControl.Overlay>
+        </LayersControl>
+      </MapContainer>
     </div>
   );
 }
