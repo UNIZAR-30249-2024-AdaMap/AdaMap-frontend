@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { MapContainer, TileLayer, LayersControl, WMSTileLayer } from "react-leaflet";
 import "leaflet/dist/leaflet.css";
 import "leaflet-defaulticon-compatibility";
@@ -6,11 +6,32 @@ import "leaflet-defaulticon-compatibility/dist/leaflet-defaulticon-compatibility
 
 export default function AdaMap() {
   const { BaseLayer, Overlay } = LayersControl;
-  const [activeLayer, setActiveLayer] = useState("Planta 0");
+  const [activeLayer, setActiveLayer] = useState("Planta 0"); // Estado inicial, primera planta activada por defecto
 
   const handleLayerChange = (layerName) => {
+    // If the clicked layer is already active, do nothing
     if (activeLayer === layerName) return;
+    // Otherwise, update the active layer
     setActiveLayer(layerName);
+  };
+
+  useEffect(() => {
+    if (activeLayer) {
+      fetchGeoData(activeLayer);
+    }
+  }, [activeLayer]);
+
+  const fetchGeoData = (layerName) => {
+    const layerIndex = layerName.split(' ')[1]; // Extrae el índice de la capa
+    const url = `http://localhost:8080/geoserver/proyecto/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=proyecto:espacios_eina_planta${layerIndex}&outputFormat=application/json`;
+    fetch(url)
+      .then(response => response.json())
+      .then(data => {
+        console.log(`GeoData for ${layerName}:`, data);
+      })
+      .catch(error => {
+        console.error(`Error fetching GeoData for ${layerName}:`, error);
+      });
   };
 
   return (
