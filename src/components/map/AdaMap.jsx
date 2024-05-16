@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { MapContainer, TileLayer, LayersControl, WMSTileLayer } from "react-leaflet";
+import { MapContainer, TileLayer, LayersControl, WMSTileLayer, GeoJSON } from "react-leaflet";
 import "leaflet/dist/leaflet.css";
 import "leaflet-defaulticon-compatibility";
 import "leaflet-defaulticon-compatibility/dist/leaflet-defaulticon-compatibility.css";
@@ -7,12 +7,17 @@ import "leaflet-defaulticon-compatibility/dist/leaflet-defaulticon-compatibility
 export default function AdaMap() {
   const { BaseLayer, Overlay } = LayersControl;
   const [activeLayer, setActiveLayer] = useState("Planta 0"); // Estado inicial, primera planta activada por defecto
+  const [geoJsonData, setGeoJsonData] = useState(null);
+  const [selectedFeature, setSelectedFeature] = useState(null);
+
+
 
   const handleLayerChange = (layerName) => {
     // If the clicked layer is already active, do nothing
     if (activeLayer === layerName) return;
     // Otherwise, update the active layer
     setActiveLayer(layerName);
+    setGeoJsonData(null);
   };
 
   useEffect(() => {
@@ -27,11 +32,41 @@ export default function AdaMap() {
     fetch(url)
       .then(response => response.json())
       .then(data => {
-        console.log(`GeoData for ${layerName}:`, data);
+        setGeoJsonData(data);
+        //console.log(`GeoData for ${layerName}:`, data);
       })
       .catch(error => {
         console.error(`Error fetching GeoData for ${layerName}:`, error);
       });
+  };
+
+  const onEachFeature = (feature, layer) => {
+    layer.on({
+      click: () => {
+        console.log('Feature properties:', feature.properties);
+        setSelectedFeature(feature.properties.idEspacio);
+      }
+    });
+  };
+
+  const featureStyle = (feature) => {
+    if (selectedFeature === feature.properties.idEspacio) {
+      return {
+        weight: 2,
+        color: '#134778',
+        fillColor: '#134778',
+        fillOpacity: 0.5
+      };
+    } else {
+      switch (feature.properties.tipoEspacioDefecto) {
+        case 'AULA': return { color: "#ff0000", weight: 2, fillOpacity: 0.5 };        // Rojo
+        case 'SEMINARIO': return { color: "#00ff00", weight: 2, fillOpacity: 0.5 };   // Verde
+        case 'LABORATORIO': return { color: "#0000ff", weight: 2, fillOpacity: 0.5 }; // Azul
+        case 'DESPACHO': return { color: "#ffff00", weight: 2, fillOpacity: 0.5 };    // Amarillo
+        case 'SALA_COMUN': return { color: "#ff00ff", weight: 2, fillOpacity: 0.5 };  // Magenta
+        default: return { weight: 0, fillOpacity: 0 };  // Invisibles si no definido
+      }
+    }
   };
 
   return (
@@ -63,6 +98,13 @@ export default function AdaMap() {
             </Overlay>
           ))}
         </LayersControl>
+        {geoJsonData && (
+          <GeoJSON
+            data={geoJsonData}
+            onEachFeature={onEachFeature}
+            style={featureStyle}
+          />
+        )}
       </MapContainer>
     </div>
   );
