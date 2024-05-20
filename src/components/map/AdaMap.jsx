@@ -38,15 +38,6 @@ export default function AdaMap() {
       });
   };
 
-  /*const onEachFeature = (feature, layer) => {
-    layer.on({
-      click: () => {
-        console.log('Feature properties:', feature.properties);
-        setSelectedFeature(feature.properties.idEspacio);
-      }
-    });
-  };*/
-
   const createPopupContent = (properties) => {
     return `<h1>Nombre: ${properties.Nombre}</h1>
             <p>Id espacio: ${properties.idEspacio}</p>
@@ -62,9 +53,7 @@ export default function AdaMap() {
       click: () => {
         console.log('Feature properties:', feature.properties);
         setSelectedFeature(feature.properties.idEspacio);
-        // Crea el contenido del popup basado en las propiedades del feature
         var popupContent = createPopupContent(feature.properties);
-        // Crea y abre el popup en el mapa
         var popup = L.popup()
           .setLatLng(layer.getBounds().getCenter())
           .setContent(popupContent)
@@ -132,14 +121,6 @@ export default function AdaMap() {
             style={featureStyle}
           />
         )}
-
-        {/*geoJsonData && (
-          <GeoJSON
-            data={geoJsonData}
-            onEachFeature={onEachFeature}
-            style={featureStyle}
-          />
-        )*/}
       </MapContainer>
     </div>
   );
