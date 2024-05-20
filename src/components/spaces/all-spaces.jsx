@@ -112,7 +112,6 @@ export function AllSpaces() {
               {space.reservable &&
                 (<DialogReserva index={index} idNombre={space.id} aforo={space.aforo} />)
               }
-              <Button className={cn(buttonVariants({ variant: 'adaMap' }), 'w-full')}>Mapa</Button>
             </div>
           </div>
         ))}

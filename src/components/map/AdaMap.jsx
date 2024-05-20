@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from "react";
-import { MapContainer, TileLayer, LayersControl, WMSTileLayer, GeoJSON } from "react-leaflet";
+import React, { useState, useEffect, useRef } from "react";
+import { MapContainer, TileLayer, LayersControl, WMSTileLayer, GeoJSON, useMap } from "react-leaflet";
 import "leaflet/dist/leaflet.css";
 import "leaflet-defaulticon-compatibility";
 import "leaflet-defaulticon-compatibility/dist/leaflet-defaulticon-compatibility.css";
@@ -9,8 +9,7 @@ export default function AdaMap() {
   const [activeLayer, setActiveLayer] = useState("Planta 0");
   const [geoJsonData, setGeoJsonData] = useState(null);
   const [selectedFeature, setSelectedFeature] = useState(null);
-
-
+  const mapRef = useRef(null);
 
   const handleLayerChange = (layerName) => {
     if (activeLayer === layerName) return;
@@ -19,6 +18,7 @@ export default function AdaMap() {
   };
 
   useEffect(() => {
+
     if (activeLayer) {
       fetchGeoData(activeLayer);
     }
@@ -38,11 +38,38 @@ export default function AdaMap() {
       });
   };
 
-  const onEachFeature = (feature, layer) => {
+  /*const onEachFeature = (feature, layer) => {
     layer.on({
       click: () => {
         console.log('Feature properties:', feature.properties);
         setSelectedFeature(feature.properties.idEspacio);
+      }
+    });
+  };*/
+
+  const createPopupContent = (properties) => {
+    return `<h1>Nombre: ${properties.Nombre}</h1>
+            <p>Id espacio: ${properties.idEspacio}</p>
+            <p>Edificio: ${properties.EDIFICIO}</p>
+            <p>Categoría: ${properties.tipoEspacioDefecto}</p>
+            <p>Tamaño: ${properties.tamano} m²</p>`;
+  };
+
+  const onEachFeature = (feature, layer) => {
+    const map = useMap();
+    // Vincular un popup al layer y abrirlo en el click
+    layer.on({
+      click: () => {
+        console.log('Feature properties:', feature.properties);
+        setSelectedFeature(feature.properties.idEspacio);
+        // Crea el contenido del popup basado en las propiedades del feature
+        var popupContent = createPopupContent(feature.properties);
+        // Crea y abre el popup en el mapa
+        var popup = L.popup()
+          .setLatLng(layer.getBounds().getCenter())
+          .setContent(popupContent)
+          .openOn(map);
+
       }
     });
   };
@@ -57,12 +84,12 @@ export default function AdaMap() {
       };
     } else {
       switch (feature.properties.tipoEspacioDefecto) {
-        case 'AULA': return { color: "#ff0000", weight: 2, fillOpacity: 0.5 };        // Rojo
-        case 'SEMINARIO': return { color: "#00ff00", weight: 2, fillOpacity: 0.5 };   // Verde
-        case 'LABORATORIO': return { color: "#0000ff", weight: 2, fillOpacity: 0.5 }; // Azul
-        case 'DESPACHO': return { color: "#ffff00", weight: 2, fillOpacity: 0.5 };    // Amarillo
-        case 'SALA_COMUN': return { color: "#ff00ff", weight: 2, fillOpacity: 0.5 };  // Magenta
-        default: return { weight: 0, fillOpacity: 0 };  // Invisibles si no definido
+        case 'AULA': return { color: "#ff0000", fillColor: "#ff0000", weight: 2, fillOpacity: 0.5 };
+        case 'SEMINARIO': return { color: "#00ff00", fillColor: "#00ff00", weight: 2, fillOpacity: 0.5 };
+        case 'LABORATORIO': return { color: "#0000ff", fillColor: "#0000ff", weight: 2, fillOpacity: 0.5 };
+        case 'DESPACHO': return { color: "#ffff00", fillColor: "#ffff00", weight: 2, fillOpacity: 0.5 };
+        case 'SALA_COMUN': return { color: "#ff00ff", fillColor: "#ff00ff", weight: 2, fillOpacity: 0.5 };
+        default: return { weight: 0, fillOpacity: 0 };
       }
     }
   };
@@ -84,7 +111,7 @@ export default function AdaMap() {
               checked={activeLayer === `Planta ${index}`}
             >
               <WMSTileLayer
-                url="http://localhost:8080/geoserver/proyecto/wms"
+                url=""
                 layers={`proyecto:espacios_eina_planta${index}`}
                 format="image/png"
                 transparent={true}
@@ -99,10 +126,20 @@ export default function AdaMap() {
         {geoJsonData && (
           <GeoJSON
             data={geoJsonData}
-            onEachFeature={onEachFeature}
+            onEachFeature={(feature, layer) => {
+              onEachFeature(feature, layer);
+            }}
             style={featureStyle}
           />
         )}
+
+        {/*geoJsonData && (
+          <GeoJSON
+            data={geoJsonData}
+            onEachFeature={onEachFeature}
+            style={featureStyle}
+          />
+        )*/}
       </MapContainer>
     </div>
   );
