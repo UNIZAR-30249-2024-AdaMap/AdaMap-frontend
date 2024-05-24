@@ -1,9 +1,9 @@
 {
   "pages": {
-    "/(logged)/spaces/page": [
+    "/(logged)/filters/page": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
-      "static/chunks/app/(logged)/spaces/page.js"
+      "static/chunks/app/(logged)/filters/page.js"
     ],
     "/(logged)/layout": [
       "static/chunks/webpack.js",
@@ -30,6 +30,11 @@
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
       "static/chunks/app/sign-in/layout.js"
+    ],
+    "/(logged)/spaces/page": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/chunks/app/(logged)/spaces/page.js"
     ]
   }
 }

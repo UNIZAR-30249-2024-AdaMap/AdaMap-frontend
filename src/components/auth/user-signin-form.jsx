@@ -4,12 +4,12 @@ import { cn } from '@/lib/utils'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import Link from 'next/link'
-import { signIn } from 'next-auth/react'
+import { signIn, getSession } from 'next-auth/react'
 import { Button } from '@/components/ui/button'
 import { toast } from 'sonner'
 import { useRouter } from 'next/navigation'
 import { useState } from 'react'
-
+import useSWR from "swr";
 
 export function UserSignIn({ className, ...props }) {
 
@@ -33,12 +33,22 @@ export function UserSignIn({ className, ...props }) {
               console.log('res', res)
               if (res.status === 200) {
                 setIsLoading(false)
+
+                const session = await getSession();
+                console.log("session ",session)
+                const user = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/personas`, {
+                      headers: {
+                        Authorization: `Bearer ${session.accessToken}`
+                      }
+              }).then(res => res.json())
+                localStorage.setItem('user', JSON.stringify(user));
                 router.push('/spaces')
                 resolve()
               }
               //throw new Error(res.error)
             })
             .catch((error) => {
+              console.log("error sadfa", error)
               setIsLoading(false)
               reject(error)
             })

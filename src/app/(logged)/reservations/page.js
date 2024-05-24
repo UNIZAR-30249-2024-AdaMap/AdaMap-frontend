@@ -1,8 +1,12 @@
+'use client'
+
 import { AllReservations } from "@/components/reservations/all-reservations"
 
-const rol = "Gerente"
-
 export default function ReservationsPage() {
+  const rol = "admin"
+  // const user = JSON.parse(localStorage.getItem('user'))
+  // const rol = user?.roles.join(', ').toLowerCase();
+
   return (
     <div className="container px-1 py-20">
       <div className="space-y-2">

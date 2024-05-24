@@ -23,6 +23,8 @@ import { Category, Planta } from '@/lib/constants'
 import { toast } from 'sonner'
 import useSWR from 'swr'
 import { useState } from 'react'
+import { useSession } from "next-auth/react"
+
 
 
 export function Filters() {

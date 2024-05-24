@@ -13,19 +13,17 @@ const handler = NextAuth({
   providers: [
     Credentials({
       authorize: async (credentials) => {
-        console.log("credentials ", credentials)
+        console.log("credentials route", credentials)
 
         const user = await fetch(process.env.NEXT_PUBLIC_BACKEND_URL + '/api/personas/login?' + new URLSearchParams({ correo: credentials.correo }).toString())
 
-        console.log("useeeeeeeeeeeeeeeeer", user)
         if (!user) {
           throw new Error('No user found with the entered username.');
         }
 
         const parsedUser = await user.text()
         
-        
-        console.log("parsedUser", parsedUser)
+        console.log("{token: parsedUser}", {token: parsedUser})
         return {token: parsedUser};  // Los datos que retorna aquí estarán disponibles en la sesión
 
       }

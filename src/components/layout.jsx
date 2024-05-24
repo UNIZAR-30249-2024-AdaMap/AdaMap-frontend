@@ -4,13 +4,13 @@ import Image from "next/image";
 import Link from 'next/link'
 import { NavBarItems } from '@/lib/constants'
 import { signOut } from "next-auth/react"
-import { useUser } from "@/context/user-context";
+import { useUser } from "@/context/user-context"
+import { useEffect, useState } from 'react';
 
 export default function Layout() {
 
-  const { user } = useUser()
-  
-  console.log('user con useUser', user)
+  const user = JSON.parse(localStorage.getItem('user'))
+  const esGerente = user?.roles.includes('GERENTE');
 
   return (
     <div className="bg-custom-AdaMapBlue p-4 w-full fixed">
@@ -31,7 +31,7 @@ export default function Layout() {
         <div className="flex items-center space-x-4 mr-0 md:mr-5">
           <div className="flex items-center space-x-2">
             {NavBarItems.map((item, index) => (
-              (true || index !== 0) && (
+              (esGerente || index !== 0) && (
                 <Link key={item.href} href={item.href}>
                   <h1 className="text-lg font-bold md:text-md hover:text-custom-AdaMapBlueDark mr-9">{item.title}</h1>
                 </Link>
@@ -41,6 +41,7 @@ export default function Layout() {
           <button
             onClick={() => {
               signOut({ callbackUrl: "/" });
+              localStorage.removeItem('user')
             }}
             className="cursor-pointer text-white bg-custom-AdaMapBlueDark p-2 rounded-lg hover:bg-custom-AdaMapBlueLight hover:text-black mt-5 mr-5"
           >

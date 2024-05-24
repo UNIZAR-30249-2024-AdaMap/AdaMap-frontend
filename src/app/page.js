@@ -10,9 +10,6 @@ import { usePathname } from 'next/navigation'
 export default function InitPage() {
   const path = usePathname()
 
-  console.log('path', path)
-  console.log('path.split', path.split('/'))
-
   return (
     <div className="flex flex-col items-center justify-center min-h-screen py-2 bg-gray-50">
       <main className="container mx-auto p-4">

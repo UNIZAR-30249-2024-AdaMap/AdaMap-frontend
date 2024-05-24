@@ -3,11 +3,16 @@
  * Frontend: AdaMap                          *
  * Asignatura: Laboratorio de Ingeniería de Software *
  ******************************************************************************************/
+'use client'
+
 import { Filters } from "@/components/filters/filters"
 
-const rol = "Gerente"
 
 export default function FiltersPage() {
+
+  const user = JSON.parse(localStorage.getItem('user'))
+  const rol = user?.roles.join(', ').toLowerCase();
+
   return (
     <div className="container px-1 py-20">
       <div className="space-y-2">

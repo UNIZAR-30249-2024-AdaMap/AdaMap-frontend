@@ -1,8 +1,13 @@
+'use client'
+
 import { SpacesGerente } from "@/components/spaces-gerente/spaces-gerente";
 
-const rol = "Gerente"
-
 export default function SpacesGerentePage() {
+
+  //const user = JSON.parse(localStorage.getItem('user'))
+  //const rol = user?.roles.join(', ').toLowerCase();
+  const rol = "admin"
+
   return (
     <div className="container px-1 py-20">
       <div className="space-y-2">
