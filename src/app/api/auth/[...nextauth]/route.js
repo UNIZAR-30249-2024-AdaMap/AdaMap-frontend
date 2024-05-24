@@ -22,11 +22,11 @@ const handler = NextAuth({
           throw new Error('No user found with the entered username.');
         }
 
-        const parsedUser = await user.json()
+        const parsedUser = await user.text()
         
         
         console.log("parsedUser", parsedUser)
-        return parsedUser;  // Los datos que retorna aquí estarán disponibles en la sesión
+        return {token: parsedUser};  // Los datos que retorna aquí estarán disponibles en la sesión
 
       }
     })

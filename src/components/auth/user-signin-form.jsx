@@ -34,8 +34,9 @@ export function UserSignIn({ className, ...props }) {
               if (res.status === 200) {
                 setIsLoading(false)
                 router.push('/spaces')
+                resolve()
               }
-              throw new Error(res.error)
+              //throw new Error(res.error)
             })
             .catch((error) => {
               setIsLoading(false)
