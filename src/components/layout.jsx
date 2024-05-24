@@ -4,10 +4,13 @@ import Image from "next/image";
 import Link from 'next/link'
 import { NavBarItems } from '@/lib/constants'
 import { signOut } from "next-auth/react"
+import { useUser } from "@/context/user-context";
 
 export default function Layout() {
 
+  const { user } = useUser()
   
+  console.log('user con useUser', user)
 
   return (
     <div className="bg-custom-AdaMapBlue p-4 w-full fixed">
@@ -28,7 +31,7 @@ export default function Layout() {
         <div className="flex items-center space-x-4 mr-0 md:mr-5">
           <div className="flex items-center space-x-2">
             {NavBarItems.map((item, index) => (
-              (esGerente || index !== 0) && (
+              (true || index !== 0) && (
                 <Link key={item.href} href={item.href}>
                   <h1 className="text-lg font-bold md:text-md hover:text-custom-AdaMapBlueDark mr-9">{item.title}</h1>
                 </Link>

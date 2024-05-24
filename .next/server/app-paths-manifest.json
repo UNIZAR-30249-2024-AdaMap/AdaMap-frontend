@@ -1,7 +1,6 @@
 {
+  "/api/auth/[...nextauth]/route": "app/api/auth/[...nextauth]/route.js",
   "/page": "app/page.js",
-  "/favicon.ico/route": "app/favicon.ico/route.js",
-  "/(logged)/filters/page": "app/(logged)/filters/page.js",
-  "/(logged)/spaces/page": "app/(logged)/spaces/page.js",
-  "/sign-in/page": "app/sign-in/page.js"
+  "/sign-in/page": "app/sign-in/page.js",
+  "/(logged)/spaces/page": "app/(logged)/spaces/page.js"
 }

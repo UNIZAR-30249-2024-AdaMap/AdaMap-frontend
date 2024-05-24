@@ -1,6 +1,7 @@
 'use client'
 
 import Layout from "@/components/layout";
+import { UserProvider } from "@/context/user-context";
 import { useSession } from "next-auth/react"
 import useSWR from "swr";
 
@@ -16,20 +17,20 @@ export default function RootLayout({ children, params }) {
    const { data: user, isLoading } = useSWR(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/personas`,
      (url) =>
        fetch(url, {
-         headers: {
-           Authorization: `Bearer ${session?.accessToken}`,
-         },
+        headers: {
+          Authorization: `Bearer ${session?.accessToken}`
+        }
        }).then((res) => res.json())
    );
-  
-  console.log("useeeeeeeeeeeer", user)
 
   return (
     <div>
-      <Layout />
-      <div className="pt-24">
-        {children}
-      </div>
+      <UserProvider user={user}>
+        <Layout />
+        <div className="pt-24">
+          {children}
+        </div>
+      </UserProvider>
     </div>
   );
 }
