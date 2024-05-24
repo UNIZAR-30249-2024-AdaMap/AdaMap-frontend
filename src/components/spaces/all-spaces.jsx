@@ -87,7 +87,7 @@ export function AllSpaces() {
               href={'/filters'}
               className={cn(buttonVariants({ variant: 'adaMap' }), 'ml-4 px-7'
               )}>
-              Filtrar
+              Filtros
             </Link>
           </div>
           <DialogReservaVariosEspacios />

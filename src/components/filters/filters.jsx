@@ -20,13 +20,61 @@ import {
   SelectValue,
 } from "@/components/ui/select"
 import { Category, Planta } from '@/lib/constants'
+import { toast } from 'sonner'
+import useSWR from 'swr'
+import { useState } from 'react'
 
 
 export function Filters() {
 
-  const handleSubmit = async (e) => {
-    console.log('Busqueda hecha')
-  }
+  const { data: session } = useSession()
+  const [name, setName] = useState('');
+  console.log('nombre', name)
+
+  const { data: filtroId, isLoadingUsers } = useSWR(() => name ? `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/espacios/${name}` : null, (url) => fetch(url, {
+    headers: {
+      Authorization: `Bearer ${session?.accessToken}`
+    }
+  }).then(res => res.json()));
+
+ /* const handleSubmit = async (e) => {
+    e.preventDefault();
+    const { correo } = e.target;
+
+    try {
+      const filters = () => {
+        return new Promise((resolve, reject) => {
+          setIsLoading(true);
+          signIn('credentials', {
+            correo: correo.value,
+            redirect: false
+          })
+            .then(async (res) => {
+              console.log('res', res);
+              if (res.status === 200) {
+                setIsLoading(false);
+                router.push('/spaces');
+                resolve();
+              }
+              //throw new Error(res.error)
+            })
+            .catch((error) => {
+              setIsLoading(false);
+              reject(error);
+            })
+        });
+      };
+
+      toast.promise(filters, {
+        loading: 'cargando...',
+        success: () => 'funciona',
+        error: (error) => JSON.stringify(error)
+      });
+    } catch (error) {
+      console.log('error', error);
+      toast.error(error?.message);
+    }
+  }*/
 
   return (
       <div className="container grid gap-6 md:gap-8">
@@ -46,9 +94,11 @@ export function Filters() {
                 Numero de espacios
               </Label>
               <div className="flex items-center gap-2">
-                <Input id="spaces" placeholder="Introduce el numero de espacios" type="number" 
-                  onChange={(e) => console.log(e.target.value)}
-                />
+              <Input 
+                id="name" 
+                placeholder="Introduce el identificador" 
+                onChange={(e) => setName(e.target.value)}
+              />
               </div>
             </div>
             <div className="flex flex-col gap-1">

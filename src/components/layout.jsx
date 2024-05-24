@@ -5,9 +5,9 @@ import Link from 'next/link'
 import { NavBarItems } from '@/lib/constants'
 import { signOut } from "next-auth/react"
 
-const esGerente = true
-
 export default function Layout() {
+
+  
 
   return (
     <div className="bg-custom-AdaMapBlue p-4 w-full fixed">
