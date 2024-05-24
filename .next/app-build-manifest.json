@@ -35,6 +35,16 @@
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
       "static/chunks/app/(logged)/spaces/page.js"
+    ],
+    "/(logged)/my-reservations/page": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/chunks/app/(logged)/my-reservations/page.js"
+    ],
+    "/(logged)/modify-reservations-spaces/page": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/chunks/app/(logged)/modify-reservations-spaces/page.js"
     ]
   }
 }

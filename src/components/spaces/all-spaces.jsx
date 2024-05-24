@@ -10,6 +10,8 @@ import { Input } from "@/components/ui/input"
 import Link from 'next/link'
 import { DialogReserva } from "@/components/spaces/reserve-dialog"
 import { DialogReservaVariosEspacios } from "@/components/spaces/reserve-various-spaces-dialog"
+import useSWR from 'swr'
+import { useEffect } from 'react'
 
 const spacesData = [
   {
@@ -61,7 +63,25 @@ const spacesData = [
 
 export function AllSpaces() {
   const [searchTerm, setSearchTerm] = useState('')
+  // const [fetchedData, setFetchedData] = useState(null);
 
+  const { data: espacios } = useSWR(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/espacios/buscar`);
+  console.log(espacios);
+
+  // useEffect(() => {
+  //   const fetchData = async () => {
+  //     try {
+  //       const res = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/espacios/buscar`);
+  //       const data = await res.json();
+  //       setFetchedData(data);
+  //       console.log("Fetched data:", data);
+  //     } catch (error) {
+  //       console.error("Error fetching data:", error);
+  //     }
+  //   };
+
+  //   fetchData();
+  // }, []);
 
   const filteredSpaces = spacesData.filter(spacesData => {
     return spacesData.id.toLowerCase().includes(searchTerm.toLowerCase())

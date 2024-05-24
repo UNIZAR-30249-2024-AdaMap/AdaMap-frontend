@@ -29,54 +29,77 @@ import { useSession } from "next-auth/react"
 
 export function Filters() {
 
+  const [form, setForm] = useState({ planta: null, categoria: null, ocupantes: null })
+  const setter = ({ key, value }) => setForm({ ...form, [key]: value })
   const { data: session } = useSession()
-  const [name, setName] = useState('');
-  console.log('nombre', name)
+  const [espaciosFiltrados, setEspaciosFiltrados] = useState([])
 
-  const { data: filtroId, isLoadingUsers } = useSWR(() => name ? `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/espacios/${name}` : null, (url) => fetch(url, {
-    headers: {
-      Authorization: `Bearer ${session?.accessToken}`
-    }
-  }).then(res => res.json()));
+  console.log("espaciosFiltrados", espaciosFiltrados)
 
- /* const handleSubmit = async (e) => {
+  const handleSubmit = (e) => {
     e.preventDefault();
-    const { correo } = e.target;
 
+    setEspaciosFiltrados([])
+
+    let newForm = {...form};
+
+    if (form.ocupantes === 0 || form.ocupantes === null) {
+      const { ocupantes, ...rest } = newForm;
+      newForm = rest;
+    }
+
+    if (form.categoria === null) {
+      const { categoria, ...rest } = newForm;
+      newForm = rest;
+    }
+
+    if (form.planta === null) {
+      const { planta, ...rest } = newForm;
+      newForm = rest;
+    }
+    
     try {
-      const filters = () => {
-        return new Promise((resolve, reject) => {
-          setIsLoading(true);
-          signIn('credentials', {
-            correo: correo.value,
-            redirect: false
-          })
+      const filtrarBusqueda = () => {
+        return new Promise(async (resolve, reject) => {
+          const params = new URLSearchParams();
+
+          // Solo añadir los parámetros que existen en newForm
+          if ('planta' in newForm) {
+            params.append('planta', newForm.planta);
+          }
+          if ('categoria' in newForm) {
+            params.append('categoria', newForm.categoria);
+          }
+          if ('ocupantes' in newForm) {
+            params.append('ocupantes', newForm.ocupantes);
+          }
+          
+          await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/espacios/buscar?${params.toString()}`)
             .then(async (res) => {
-              console.log('res', res);
+              const body = await res.json();
               if (res.status === 200) {
-                setIsLoading(false);
-                router.push('/spaces');
+                console.log("bodddddy", body);
+                setEspaciosFiltrados(body);
                 resolve();
               }
-              //throw new Error(res.error)
             })
             .catch((error) => {
-              setIsLoading(false);
+              console.log(error);
               reject(error);
-            })
+            });
         });
       };
 
-      toast.promise(filters, {
-        loading: 'cargando...',
-        success: () => 'funciona',
-        error: (error) => JSON.stringify(error)
+      toast.promise(filtrarBusqueda, {
+        loading: "Cargando...",
+        success: () => "Funciona",
+        error: (error) => JSON.stringify(error),
       });
     } catch (error) {
-      console.log('error', error);
+      console.log("error", error);
       toast.error(error?.message);
     }
-  }*/
+  };
 
   return (
       <div className="container grid gap-6 md:gap-8">
@@ -84,30 +107,24 @@ export function Filters() {
         <div className="grid gap-6">
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
             <div className="flex flex-col gap-1">
-              <Label className="text-sm" htmlFor="name">
-                Identificador
-              </Label>
-              <Input id="name" placeholder="Introduce el identificador" 
-                onChange={(e) => console.log(e.target.value)}
-              />
-            </div>
-            <div className="flex flex-col gap-1">
               <Label className="text-sm" htmlFor="spaces">
-                Numero de espacios
+                Ocupantes máximos
               </Label>
               <div className="flex items-center gap-2">
               <Input 
-                id="name" 
-                placeholder="Introduce el identificador" 
-                onChange={(e) => setName(e.target.value)}
-              />
+                type="number" 
+                placeholder="Ocupantes máximos" 
+                onChange={(e) => {
+                  setter({ key: 'ocupantes', value: e.target.value })
+                }} />
+              
               </div>
             </div>
             <div className="flex flex-col gap-1">
               <Label className="text-sm" htmlFor="category">
-                Categoria
+                Categoría
               </Label>
-              <Select>
+              <Select onValueChange={categoriaValue => setter({ key: 'categoria', value: categoriaValue})}>
               <SelectTrigger >
                 <SelectValue placeholder="Seleciona la categoria" />
                 </SelectTrigger>
@@ -117,42 +134,17 @@ export function Filters() {
                       <SelectItem
                         key={index}
                         value={uso.value}
-                        onSelect={(value) => console.log(value)}
                       >{uso.title}</SelectItem>
                     ))}
                   </SelectGroup>
                 </SelectContent>
               </Select>
             </div>
-            
-            <div className="flex flex-col gap-1">
-              <Label className="text-sm" htmlFor="start-time">
-                Hora de inicio y Hora de fin
-              </Label>
-              <div className="flex items-center gap-2">
-                <Input type="time" id="start-time" 
-                 onChange={(e) => console.log(e.target.value)}
-                />
-                <Input type="time" id="end-time" 
-                  onChange={(e) => console.log(e.target.value)}
-                />
-              </div>
-            </div>
-            <div className="flex flex-col gap-1">
-              <Label className="text-sm" htmlFor="min-occupancy">
-                Nuero maximo de ocupantes
-              </Label>
-              <div className="flex items-center gap-2">
-                <Input id="min-occupancy" placeholder="Introduce max ocupantes" type="number" 
-                  onChange={(e) => console.log(e.target.value)}
-                />
-              </div>
-            </div>
             <div className="flex flex-col gap-1">
               <Label className="text-sm" htmlFor="plant">
                 Planta
               </Label>
-              <Select>
+              <Select onValueChange={plantaValue => setter({ key: 'planta', value: plantaValue})}>
               <SelectTrigger >
                 <SelectValue placeholder="Seleciona la planta" />
                 </SelectTrigger>
@@ -162,7 +154,6 @@ export function Filters() {
                       <SelectItem
                         key={index}
                         value={uso.value}
-                        onSelect={(value) => console.log(value)}
                       >{uso.title}</SelectItem>
                     ))}
                   </SelectGroup>
