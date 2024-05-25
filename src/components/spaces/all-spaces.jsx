@@ -82,7 +82,7 @@ export function AllSpaces() {
             <Separator />
             <div className="p-4  grid gap-2">
               {space.reservable &&
-                (<DialogReserva index={index} idNombre={space.idEspacio} />)
+                (<DialogReserva index={index} idEspacio={space.idEspacio} idNombre={space.nombre} />)
               }
             </div>
           </div>

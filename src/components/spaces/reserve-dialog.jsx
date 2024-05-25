@@ -28,7 +28,8 @@ import { useState } from "react"
 
 export function DialogReserva({
   index,
-  idNombre,
+  idEspacio,
+  idNombre
 }) {
 
   const [form, setForm] = useState({
@@ -61,7 +62,7 @@ export function DialogReserva({
                 'Authorization': `Bearer ${session?.accessToken}` // Ajusta esto según cómo manejes la autenticación
               },
               body: JSON.stringify({
-                espacios: [idNombre],
+                espacios: [idEspacio],
                 tipoUso: form.tipoUso,
                 numAsistentes: form.numAsistentes,
                 horaInicio: form.horaInicio,

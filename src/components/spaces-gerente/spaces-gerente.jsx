@@ -6,69 +6,33 @@ import { TableHead, TableRow, TableHeader, TableCell, TableBody, Table } from "@
 import { Button } from "@/components/ui/button"
 import { LuSearch, LuTrash, LuClipboardEdit } from "react-icons/lu"
 import { DialogEditSpace } from "@/components/spaces-gerente/edit-space"
-
-const spacesData = [
-  {
-    id: "Laboratorio 1.02",
-    edificio: "Ada Byron",
-    categoria: "Laboratorio",
-    planta: "1",
-    tamano: "50.34 m²",
-    horario: "L-D 8:00-20:00",
-    propietario: "DIIS",
-    aforo: "50",
-    porcentaje: "100%",
-    reservable: true
-  },
-  {
-    id: "Aula 0.05",
-    edificio: "Ada Byron",
-    categoria: "Aula",
-    planta: "1",
-    tamano: "50.34 m²",
-    horario: "L-D 8:00-20:00",
-    propietario: "DIIS",
-    aforo: "50",
-    porcentaje: "100%",
-    reservable: true
-  },
-  {
-    id: "Laboratorio 1.03",
-    edificio: "Ada Byron",
-    categoria: "Laboratorio",
-    planta: "1",
-    tamano: "50.34 m²",
-    horario: "L-D 8:00-20:00",
-    propietario: "DIIS",
-    aforo: "50",
-    porcentaje: "100%",
-    reservable: false
-  },
-  {
-    id: "Laboratorio 1.04",
-    edificio: "Ada Byron",
-    categoria: "Laboratorio",
-    planta: "1",
-    tamano: "50.34 m²",
-    horario: "L-D 8:00-20:00",
-    propietario: "DIIS",
-    aforo: "50",
-    porcentaje: "50%",
-    reservable: true
-  }
-];
+import { useSession } from 'next-auth/react'
+import useSWR from 'swr'
 
 export function SpacesGerente() {
   const [searchTerm, setSearchTerm] = useState('')
 
 
-  const filteredSpaces = spacesData.filter(spacesData => {
-    return spacesData.id.toLowerCase().includes(searchTerm.toLowerCase())
+  const { data: session } = useSession()
+
+
+  const { data: espacios, isLoading } = useSWR(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/espacios/buscar?`, (url) => fetch(url, {
+    headers: {
+      Authorization: `Bearer ${session?.accessToken}`
+    }
+  }).then(res => res.json()))
+
+  console.log(espacios);
+
+  const filteredSpaces = espacios?.filter(espacio => {
+    return espacio.nombre.toLowerCase().includes(searchTerm.toLowerCase())
   });
 
   const handleSearchChange = (e) => {
     setSearchTerm(e.target.value);
   };
+
+  if (isLoading) return null
 
   return (
     <div className="flex flex-col w-full">
@@ -88,42 +52,46 @@ export function SpacesGerente() {
           <TableHeader>
             <TableRow>
               <TableHead>Espacio</TableHead>
-              <TableHead>Edificio</TableHead>
+              <TableHead>Id</TableHead>
               <TableHead>Categoría</TableHead>
               <TableHead>Planta</TableHead>
               <TableHead>Tamaño</TableHead>
               <TableHead>Horario</TableHead>
-              <TableHead>Propietario</TableHead>
-              <TableHead>Aforo</TableHead>
-              <TableHead>Porcentaje</TableHead>
+              <TableHead>Propietario/s</TableHead>
+              <TableHead>Aforo máximo</TableHead>
+              <TableHead>Porcentaje uso</TableHead>
               <TableHead>Reservable</TableHead>
               <TableHead className="w-[100px]">Acciones</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
             {filteredSpaces.map((space, index) => (
-                <TableRow key={index}>
-                  <TableCell>{space.id}</TableCell>
-                  <TableCell>{space.edificio}</TableCell>
-                  <TableCell>{space.categoria}</TableCell>
-                  <TableCell>{space.planta}</TableCell>
-                  <TableCell>{space.tamano}</TableCell>
-                  <TableCell>{space.horario}</TableCell>
-                  <TableCell>{space.propietario}</TableCell>
-                  <TableCell>{space.aforo}</TableCell>
-                  <TableCell>{space.porcentaje}</TableCell>
-                  <TableCell>{space.reservable ? "Sí" : "No"}</TableCell>
-                  <TableCell>
-                    <div className="flex items-center gap-2">
-                      <DialogEditSpace index={index} idNombre={space.id}/>
-                      <Button className="text-red-500 hover:text-red-600" size="icon" variant="ghost">
-                        <LuTrash className="h-4 w-4" />
-                        <span className="sr-only">Eliminar</span>
-                      </Button>
-                    </div>
-                  </TableCell>
-                </TableRow>
-              ))}
+              <TableRow key={index}>
+                <TableCell>{space.nombre}</TableCell>
+                <TableCell>{space.idEspacio}</TableCell>
+                <TableCell>{space.tipoEspacioParaReserva}</TableCell>
+                <TableCell>{space.planta}</TableCell>
+                <TableCell>{space.tamano} m²</TableCell>
+                {/* <TableCell>{space.horario}</TableCell> */}
+                <TableCell>{Object.entries(space.horarioParaReserva).map(([dia, horario]) => (
+                  <p key={dia} className="text-md text-gray-500 ml-4">{dia.replace('horario', "")} : {horario}</p>
+                ))}</TableCell>
+                <TableCell>{space.propietarioEspacio.propietario.join(", ")}
+                </TableCell>
+                <TableCell>{space.numMaxPersonas}</TableCell>
+                <TableCell>{space.porcentajeUso != 0 ? space.porcentajeUso : space.porcentajeUsoDefecto} %</TableCell>
+                <TableCell>{space.reservable ? "Sí" : "No"}</TableCell>
+                <TableCell>
+                  <div className="flex items-center gap-2">
+                    <DialogEditSpace index={index} idNombre={space.id} />
+                    {/* <Button className="text-red-500 hover:text-red-600" size="icon" variant="ghost">
+                      <LuTrash className="h-4 w-4" />
+                      <span className="sr-only">Eliminar</span>
+                    </Button> */}
+                  </div>
+                </TableCell>
+              </TableRow>
+            ))}
           </TableBody>
         </Table>
       </div>
