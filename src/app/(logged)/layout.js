@@ -2,33 +2,21 @@
 
 import Layout from "@/components/layout";
 import { UserProvider } from "@/context/user-context";
-import { useSession } from "next-auth/react"
-import useSWR from "swr";
-import { useEffect } from "react";
+import { redirect } from "next/navigation";
 
 
 export default function RootLayout({ children, params }) {
 
- /* const { status, data: session } = useSession()
-
-   const { data: user, isLoading } = useSWR(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/personas`,
-     (url) =>
-       fetch(url, {
-        headers: {
-          Authorization: `Bearer ${session?.accessToken}`
-        }
-       }).then((res) => res.json())
-   );*/
-
+  if(!JSON.parse(localStorage?.getItem('user'))) return redirect('/')
 
   return (
     <div>
-      {/*<UserProvider user={user}>*/}
+      <UserProvider user={JSON.parse(localStorage?.getItem('user'))}>
         <Layout />
         <div className="pt-24">
           {children}
         </div>
-      {/*</UserProvider>*/}
+      </UserProvider>
     </div>
   );
 }

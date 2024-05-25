@@ -1,12 +1,12 @@
 'use client'
 
 import { ModifyRS } from "@/components/modifyRS/modifyRS";
+import { useUser } from "@/context/user-context";
 
 export default function ModifyRSPage() {
 
-  //const user = JSON.parse(localStorage.getItem('user'))
-  //const rol = user?.roles.join(', ').toLowerCase();
-  const rol = "admin"
+  const { user } = useUser()
+  const rol = user?.roles.join(', ').toLowerCase();
 
   return (
     <div className="container px-1 py-20">

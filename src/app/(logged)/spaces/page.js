@@ -1,11 +1,12 @@
 'use client'
 
 import { AllSpaces } from "@/components/spaces/all-spaces"
+import { useUser } from "@/context/user-context";
 
 
 export default function SpacesPage() {
 
-  const user = JSON.parse(localStorage.getItem('user'))
+  const { user } = useUser()
   const rol = user?.roles.join(', ').toLowerCase();
 
   return (

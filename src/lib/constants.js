@@ -8,10 +8,6 @@ export const NavBarItems = [
     href: '/spaces'
   },
   {
-    title: 'Mis reservas',
-    href: '/my-reservations'
-  },
-  {
     title: 'Mapa',
     href: '/map'
   }

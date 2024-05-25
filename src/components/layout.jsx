@@ -5,11 +5,10 @@ import Link from 'next/link'
 import { NavBarItems } from '@/lib/constants'
 import { signOut } from "next-auth/react"
 import { useUser } from "@/context/user-context"
-import { useEffect, useState } from 'react';
 
 export default function Layout() {
 
-  const user = JSON.parse(localStorage.getItem('user'))
+  const { user } = useUser()
   const esGerente = user?.roles.includes('GERENTE');
 
   return (
@@ -43,7 +42,7 @@ export default function Layout() {
               signOut({ callbackUrl: "/" });
               localStorage.removeItem('user')
             }}
-            className="cursor-pointer text-white bg-custom-AdaMapBlueDark p-2 rounded-lg hover:bg-custom-AdaMapBlueLight hover:text-black mt-5 mr-5"
+            className="cursor-pointer text-white bg-custom-AdaMapBlueDark p-2 rounded-lg hover:bg-custom-AdaMapBlueLight hover:text-black"
           >
             Cerrar sesión
           </button>

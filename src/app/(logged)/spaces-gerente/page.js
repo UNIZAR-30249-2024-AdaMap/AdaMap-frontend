@@ -1,12 +1,12 @@
 'use client'
 
 import { SpacesGerente } from "@/components/spaces-gerente/spaces-gerente";
+import { useUser } from "@/context/user-context";
 
 export default function SpacesGerentePage() {
 
-  //const user = JSON.parse(localStorage.getItem('user'))
-  //const rol = user?.roles.join(', ').toLowerCase();
-  const rol = "admin"
+  const { user } = useUser()
+  const rol = user?.roles.join(', ').toLowerCase();
 
   return (
     <div className="container px-1 py-20">

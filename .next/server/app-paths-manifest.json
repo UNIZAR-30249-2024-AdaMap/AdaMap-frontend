@@ -1,7 +1,9 @@
 {
-  "/page": "app/page.js",
   "/api/auth/[...nextauth]/route": "app/api/auth/[...nextauth]/route.js",
-  "/(logged)/filters/page": "app/(logged)/filters/page.js",
-  "/sign-in/page": "app/sign-in/page.js",
-  "/(logged)/spaces/page": "app/(logged)/spaces/page.js"
+  "/page": "app/page.js",
+  "/(logged)/spaces/page": "app/(logged)/spaces/page.js",
+  "/(logged)/my-reservations/page": "app/(logged)/my-reservations/page.js",
+  "/(logged)/modify-reservations-spaces/page": "app/(logged)/modify-reservations-spaces/page.js",
+  "/(logged)/spaces-gerente/page": "app/(logged)/spaces-gerente/page.js",
+  "/sign-in/page": "app/sign-in/page.js"
 }

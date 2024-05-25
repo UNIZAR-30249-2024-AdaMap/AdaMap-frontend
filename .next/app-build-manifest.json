@@ -1,9 +1,9 @@
 {
   "pages": {
-    "/(logged)/filters/page": [
+    "/(logged)/spaces/page": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
-      "static/chunks/app/(logged)/filters/page.js"
+      "static/chunks/app/(logged)/spaces/page.js"
     ],
     "/(logged)/layout": [
       "static/chunks/webpack.js",
@@ -31,11 +31,6 @@
       "static/chunks/main-app.js",
       "static/chunks/app/sign-in/layout.js"
     ],
-    "/(logged)/spaces/page": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/chunks/app/(logged)/spaces/page.js"
-    ],
     "/(logged)/my-reservations/page": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
@@ -45,6 +40,11 @@
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
       "static/chunks/app/(logged)/modify-reservations-spaces/page.js"
+    ],
+    "/(logged)/spaces-gerente/page": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/chunks/app/(logged)/spaces-gerente/page.js"
     ]
   }
 }
