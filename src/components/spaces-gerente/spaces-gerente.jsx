@@ -8,9 +8,15 @@ import { LuSearch, LuTrash, LuClipboardEdit } from "react-icons/lu"
 import { DialogEditSpace } from "@/components/spaces-gerente/edit-space"
 import { useSession } from 'next-auth/react'
 import useSWR from 'swr'
+import { mutate } from 'swr'
+
 
 export function SpacesGerente() {
   const [searchTerm, setSearchTerm] = useState('')
+  const [form, setForm] = useState({ reservable: null })
+  const setter = ({ key, value }) => setForm({ ...form, [key]: value })
+  const [reservabilidad, setReservabilidad] = useState('')
+  const [idEspacioBorrar, setIdEspacioBorrar] = useState('')
 
 
   const { data: session } = useSession()
@@ -21,8 +27,27 @@ export function SpacesGerente() {
       Authorization: `Bearer ${session?.accessToken}`
     }
   }).then(res => res.json()))
-
   console.log(espacios);
+
+  
+  // const { data: espacio, isLoadingReservable } = useSWR(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/espacios/edit/` + idEspacioBorrar 
+  // + "/reservabilidad" + reservabilidad.replace(/(Si|No)/, ''), (url) => {
+  //   console.log("URL ", url);
+  //   fetch(url, {
+  //   method : PUT,
+  //   headers: {
+  //     Authorization: `Bearer ${session?.accessToken}`
+  //   }
+  // }).then(() => {
+  //   console.log("mutate");
+  //   mutate(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/espacios/edit/` + idEspacioBorrar + "/reservabilidad")
+  //   resolve()
+  // })
+  // .catch((error) => {
+  //   console.log(error)
+  //   reject(error)
+  // })})
+  // console.log(espacio);
 
   const filteredSpaces = espacios?.filter(espacio => {
     return espacio.nombre.toLowerCase().includes(searchTerm.toLowerCase())
@@ -33,6 +58,7 @@ export function SpacesGerente() {
   };
 
   if (isLoading) return null
+  // if (isLoadingReservable) return null
 
   return (
     <div className="flex flex-col w-full">
@@ -72,7 +98,6 @@ export function SpacesGerente() {
                 <TableCell>{space.tipoEspacioParaReserva}</TableCell>
                 <TableCell>{space.planta}</TableCell>
                 <TableCell>{space.tamano} m²</TableCell>
-                {/* <TableCell>{space.horario}</TableCell> */}
                 <TableCell>{Object.entries(space.horarioParaReserva).map(([dia, horario]) => (
                   <p key={dia} className="text-md text-gray-500 ml-4">{dia.replace('horario', "")} : {horario}</p>
                 ))}</TableCell>
@@ -83,7 +108,8 @@ export function SpacesGerente() {
                 <TableCell>{space.reservable ? "Sí" : "No"}</TableCell>
                 <TableCell>
                   <div className="flex items-center gap-2">
-                    <DialogEditSpace index={index} idNombre={space.id} />
+                    <DialogEditSpace index={index} reservable={space.reservable ? "Sí" : "No"} tipoEspacioReserva={space.tipoEspacioParaReserva.charAt(0) + space.tipoEspacioParaReserva.slice(1).toLowerCase()} 
+                    idEspacio={space.idEspacio} idNombre={space.nombre} form={form} setter={setter} setReservabilidad={setReservabilidad} setIdEspacioBorrar={setIdEspacioBorrar}/>
                     {/* <Button className="text-red-500 hover:text-red-600" size="icon" variant="ghost">
                       <LuTrash className="h-4 w-4" />
                       <span className="sr-only">Eliminar</span>
