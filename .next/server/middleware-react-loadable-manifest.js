@@ -1,1 +1,1 @@
-self.__REACT_LOADABLE_MANIFEST="{\"app/(logged)/map/page.js -> @/components/map/AdaMap\":{\"id\":\"app/(logged)/map/page.js -> @/components/map/AdaMap\",\"files\":[\"static/css/css-node_modules_leaflet-defaulticon-compatibility_dist_leaflet-defaulticon-compatibility_css-c09edb.css\",\"static/chunks/_app-pages-browser_src_components_map_AdaMap_jsx.js\"]}}"
+self.__REACT_LOADABLE_MANIFEST="{}"

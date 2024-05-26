@@ -30,11 +30,6 @@
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
       "static/chunks/app/(logged)/spaces-gerente/page.js"
-    ],
-    "/(logged)/map/page": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/chunks/app/(logged)/map/page.js"
     ]
   }
 }

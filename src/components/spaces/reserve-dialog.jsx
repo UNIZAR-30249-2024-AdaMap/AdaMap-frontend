@@ -118,7 +118,7 @@ export function DialogReserva({
                 </SelectTrigger>
                 <SelectContent>
                   <SelectGroup>
-                    {tipoUso.map((uso, index) => (
+                    {tipoUso?.map((uso, index) => (
                       <SelectItem
                         key={index}
                         value={uso.value}

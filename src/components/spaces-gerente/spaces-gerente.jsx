@@ -13,10 +13,8 @@ import { mutate } from 'swr'
 
 export function SpacesGerente() {
   const [searchTerm, setSearchTerm] = useState('')
-  const [form, setForm] = useState({ reservable: null })
+  const [form, setForm] = useState({ reservable: null, categoria: null})
   const setter = ({ key, value }) => setForm({ ...form, [key]: value })
-  const [reservabilidad, setReservabilidad] = useState('')
-  const [idEspacioBorrar, setIdEspacioBorrar] = useState('')
 
 
   const { data: session } = useSession()
@@ -30,24 +28,7 @@ export function SpacesGerente() {
   console.log(espacios);
 
   
-  // const { data: espacio, isLoadingReservable } = useSWR(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/espacios/edit/` + idEspacioBorrar 
-  // + "/reservabilidad" + reservabilidad.replace(/(Si|No)/, ''), (url) => {
-  //   console.log("URL ", url);
-  //   fetch(url, {
-  //   method : PUT,
-  //   headers: {
-  //     Authorization: `Bearer ${session?.accessToken}`
-  //   }
-  // }).then(() => {
-  //   console.log("mutate");
-  //   mutate(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/espacios/edit/` + idEspacioBorrar + "/reservabilidad")
-  //   resolve()
-  // })
-  // .catch((error) => {
-  //   console.log(error)
-  //   reject(error)
-  // })})
-  // console.log(espacio);
+  
 
   const filteredSpaces = espacios?.filter(espacio => {
     return espacio.nombre.toLowerCase().includes(searchTerm.toLowerCase())
@@ -58,10 +39,9 @@ export function SpacesGerente() {
   };
 
   if (isLoading) return null
-  // if (isLoadingReservable) return null
 
   return (
-    <div className="flex flex-col w-full">
+    <div className="flex flex-col w-full ">
       <div className="bg-gray-100 dark:bg-gray-800 p-4 rounded-t-lg">
         <div className="relative">
           <LuSearch className="absolute left-3 top-3 h-4 w-4 text-gray-500 dark:text-gray-400" />
@@ -73,7 +53,7 @@ export function SpacesGerente() {
           />
         </div>
       </div>
-      <div className="border rounded-b-lg overflow-auto">
+      <div className="rounded-md border">
         <Table>
           <TableHeader>
             <TableRow>
@@ -109,7 +89,7 @@ export function SpacesGerente() {
                 <TableCell>
                   <div className="flex items-center gap-2">
                     <DialogEditSpace index={index} reservable={space.reservable ? "Sí" : "No"} tipoEspacioReserva={space.tipoEspacioParaReserva.charAt(0) + space.tipoEspacioParaReserva.slice(1).toLowerCase()} 
-                    idEspacio={space.idEspacio} idNombre={space.nombre} form={form} setter={setter} setReservabilidad={setReservabilidad} setIdEspacioBorrar={setIdEspacioBorrar}/>
+                    propietarios={space.propietarioEspacio.propietario} idEspacio={space.idEspacio} idNombre={space.nombre} form={form} setter={setter} />
                     {/* <Button className="text-red-500 hover:text-red-600" size="icon" variant="ghost">
                       <LuTrash className="h-4 w-4" />
                       <span className="sr-only">Eliminar</span>

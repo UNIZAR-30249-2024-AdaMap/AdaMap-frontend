@@ -93,7 +93,7 @@ export function AllReservations({ rol }) {
           />
         </div>
       </div>
-      <div className="border rounded-b-lg overflow-auto">
+      <div className="border rounded-b-lg overflow-hidden ">
         <Table>
           <TableHeader>
             <TableRow>

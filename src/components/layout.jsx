@@ -12,7 +12,7 @@ export default function Layout() {
   const esGerente = user?.roles.includes('GERENTE');
 
   return (
-    <div className="bg-custom-AdaMapBlue p-4 w-full fixed">
+    <div className="bg-custom-AdaMapBlue p-4 w-full fixed z-50">
       <div className="mx-auto flex items-center justify-between w-full">
         <Link href={'/spaces'}>
           <div className="flex items-center space-x-1 ml-0 md:ml-5">

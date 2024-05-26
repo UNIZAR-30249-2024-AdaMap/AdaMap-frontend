@@ -11,6 +11,7 @@ import Link from 'next/link'
 import { DialogReserva } from "@/components/spaces/reserve-dialog"
 import { DialogFileters } from "@/components/spaces/filters-dialog"
 import { DialogReservaVariosEspacios } from "@/components/spaces/reserve-various-spaces-dialog"
+import { DialogReservaAutomatica } from "@/components/spaces/reserve-automatic-dialog"
 import useSWR from 'swr'
 import { useEffect } from 'react'
 import { useSession } from 'next-auth/react'
@@ -57,12 +58,13 @@ export function AllSpaces() {
             />
             <DialogFileters form={form} setter={setter} setFilteredUrl={setFilteredUrl} />
           </div>
+          <DialogReservaAutomatica filteredSpaces={filteredSpaces} setFilteredUrl={setFilteredUrl} />
           <DialogReservaVariosEspacios filteredSpaces={filteredSpaces} setFilteredUrl={setFilteredUrl} />
         </div>
 
       </div>
       <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-        {filteredSpaces.map((space, index) => (
+        {filteredSpaces?.map((space, index) => (
           <div key={index} className="flex flex-col rounded-lg border overflow-hidden shadow-sm">
             <div className="p-4 flex-1">
               <h3 className="font-semibold text-lg">{space.nombre}</h3>
@@ -74,7 +76,7 @@ export function AllSpaces() {
               <p className="text-md text-gray-700">Propietario: {space.propietarioEspacio.propietario[0]}</p>
               <p className="text-md text-gray-700">Aforo: {space.maxPersonasParaReserva}</p>
               <p className="text-md text-gray-700">Horario:</p>
-              {Object.entries(space.horarioParaReserva).map(([dia, horario]) => (
+              {Object.entries(space.horarioParaReserva)?.map(([dia, horario]) => (
                 <p key={dia} className="text-md text-gray-500 ml-4">{dia.replace('horario', "")} : {horario}</p>
               ))}
               
