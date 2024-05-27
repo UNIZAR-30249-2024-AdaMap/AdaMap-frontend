@@ -9,16 +9,18 @@ import { useSession } from 'next-auth/react'
 import useSWR from 'swr'
 import { toast } from 'sonner'
 import { mutate } from 'swr'
+import { useUser } from "@/context/user-context";
 
 
 export function AllReservations({ rol }) {
   const [searchTerm, setSearchTerm] = useState('')
 
+  const { user } = useUser()
   const { data: session } = useSession()
 
   const { data: reservasVivas, isLoading } = useSWR(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/reservas/reservasVivas`, (url) => fetch(url, {
     headers: {
-      Authorization: `Bearer ${session?.accessToken}`
+      Authorization: `Bearer ${user.correo}`
     }
   }).then(res => res.json()))
 
@@ -45,7 +47,7 @@ export function AllReservations({ rol }) {
               method: 'DELETE',
               headers: {
                 'Content-Type': 'application/json',
-                'Authorization': `Bearer ${session?.accessToken}` // Ajusta esto según cómo manejes la autenticación
+                'Authorization': `Bearer ${user.correo}` // Ajusta esto según cómo manejes la autenticación
               }
             })
               .then(() => {

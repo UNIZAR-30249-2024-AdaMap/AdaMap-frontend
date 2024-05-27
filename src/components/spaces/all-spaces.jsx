@@ -25,6 +25,7 @@ export function AllSpaces() {
 
   const { data: session } = useSession()
 
+  console.log("session?.accessToken", session?.accessToken);
 
   const { data: espacios, isLoading } = useSWR(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/espacios/buscar?` + filteredUrl, (url) => fetch(url, {
     headers: {

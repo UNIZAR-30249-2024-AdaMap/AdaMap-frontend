@@ -25,6 +25,7 @@ import { Textarea } from "@/components/ui/textarea"
 import { toast } from "sonner"
 import { useSession } from "next-auth/react"
 import { useState } from "react"
+import { useUser } from "@/context/user-context";
 
 export function DialogReserva({
   index,
@@ -44,12 +45,14 @@ export function DialogReserva({
   const setter = ({ key, value }) => setForm({ ...form, [key]: value });
   
   const { data: session } = useSession()
+  const { user } = useUser()
   
 
   const handleSubmit = (e) => {
     e.preventDefault();
     
     console.log('form', form)
+
     
     try {
       const createNewReserva = () => {
@@ -59,7 +62,7 @@ export function DialogReserva({
               method: 'POST',
               headers: {
                 'Content-Type': 'application/json',
-                'Authorization': `Bearer ${session?.accessToken}` // Ajusta esto según cómo manejes la autenticación
+                'Authorization': `Bearer ${user.correo}` // Ajusta esto según cómo manejes la autenticación
               },
               body: JSON.stringify({
                 espacios: [idEspacio],
