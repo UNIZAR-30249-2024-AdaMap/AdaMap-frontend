@@ -39,11 +39,10 @@ import { useState } from "react";
 import { LuChevronsUpDown, LuCheck } from "react-icons/lu";
 import { toast } from "sonner";
 import { useSession } from 'next-auth/react'
+import { useUser } from "@/context/user-context";
 
 
 export function DialogReservaAutomatica({
-  filteredSpaces,
-  setFilteredUrl,
 }) {
   //console.log(filteredSpaces);
 
@@ -60,41 +59,25 @@ export function DialogReservaAutomatica({
   const [selectedSpaces, setSelectedSpaces] = useState([]);
   const [open, setOpen] = useState(false);
 
-  const { data: session } = useSession()
-
-  
-  //console.log(selectedSpaces);
-
-  const toggleSelection = (title) => {
-    setSelectedSpaces(prev => {
-      const currentIndex = prev.indexOf(title);
-      if (currentIndex === -1) {
-        return [...prev, title];
-      } else {
-        return prev.filter((item) => item !== title);
-      }
-    });
-  };
+  const { user } = useUser()
 
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    
-    console.log('selectedSpaces', selectedSpaces)
+
     console.log('form', form)
     
     try {
       const createNewReserva = () => {
         return new Promise((resolve, reject) => {
           (async () => {
-            await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/reservas/reservar`, {
+            await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/reservas/reservarAutomatica`, {
               method: 'POST',
               headers: {
                 'Content-Type': 'application/json',
-                'Authorization': `Bearer ${session?.accessToken}` // Ajusta esto según cómo manejes la autenticación
+                'Authorization': `Bearer ${user.correo}` // Ajusta esto según cómo manejes la autenticación
               },
               body: JSON.stringify({
-                espacios: selectedSpaces,
                 tipoUso: form.tipoUso,
                 numAsistentes: form.numAsistentes,
                 horaInicio: form.horaInicio,
@@ -104,8 +87,11 @@ export function DialogReservaAutomatica({
                 fecha: form.fecha,
               })
             })
-              .then(() => {
-                resolve()
+              .then(async(res) => {
+                if(res.status === 200)
+                  resolve()
+                else  
+                  reject(await res.text())
               })
               .catch((error) => {
                 console.log(error)
@@ -119,7 +105,7 @@ export function DialogReservaAutomatica({
         loading: "Cargando",
         success: () => "Reserva realizada con éxito",
         error: (error) => {
-          return "Error"
+          return error
         }
       })
       e.target.reset()
@@ -147,60 +133,10 @@ export function DialogReservaAutomatica({
           <DialogHeader>
             <DialogTitle>Selecciona varios espacios</DialogTitle>
             <DialogDescription>
-              Reserva más de un espacio si desea.
+              Reserva automáticamente sin especificar los espacios.
             </DialogDescription>
           </DialogHeader>
           <div className="grid gap-4 py-1 mt-4">
-            <div className="items-center gap-4 space-y-1">
-              <Popover
-                className="w-full mx-auto"
-                open={open}
-                onOpenChange={setOpen}
-              >
-                <div className="flex flex-col space-y-2 w-full">
-                  <Label>Espacios</Label>
-                  <PopoverTrigger asChild>
-                    <Button
-                      variant="outline"
-                      role="combobox"
-                      aria-expanded={open}
-                    >
-                      <div className="flex justify-between space-x-20 items-center text-sm overflow-hidden">
-                        <p className="font-light opacity-75">
-                          Selecciona los espacios que desea reservar
-                        </p>
-                        <LuChevronsUpDown className="h-4 w-4 shrink-0 opacity-50" />
-                      </div>
-                    </Button>
-                  </PopoverTrigger>
-                </div>
-                <PopoverContent className="w-full" align="center">
-                  <Command>
-                    <CommandList>
-                      <CommandGroup>
-                        <div className="flex flex-col items-center gap-2">
-                          {filteredSpaces?.map((espacio) => (
-                            <Button
-                              variant="adaMap"
-                              key={espacio.nombre}
-                              onClick={() => toggleSelection(espacio.idEspacio)}
-                              className={cn(
-                                "w-full text-sm",
-                                selectedSpaces.includes(espacio.idEspacio)
-                                  ? "bg-custom-AdaMapBlue text-white"
-                                  : "bg-gray-200 text-black"
-                              )}
-                            >
-                              {espacio.nombre}
-                            </Button>
-                          ))}
-                        </div>
-                      </CommandGroup>
-                    </CommandList>
-                  </Command>
-                </PopoverContent>
-              </Popover>
-            </div>
             <div className="items-center gap-4 space-y-1">
               <Label htmlFor="name">Tipo de uso</Label>
               <Select onValueChange={tipoUso => setter({ key: 'tipoUso', value: tipoUso})}>
@@ -268,7 +204,7 @@ export function DialogReservaAutomatica({
           <DialogClose asChild className="mt-3 w-full">
             <Button
               type="submit"
-              disabled={!form.duracion || !form.fecha || !form.horaInicio || !form.numAsistentes || !form.tipoUso || selectedSpaces.length === 0}
+              disabled={!form.duracion || !form.fecha || !form.horaInicio || !form.numAsistentes || !form.tipoUso}
               className={buttonVariants({ variant: "adaMap" })}
             >
               Reservar

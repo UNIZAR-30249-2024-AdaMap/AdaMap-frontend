@@ -2,7 +2,9 @@
 
 import Layout from "@/components/layout";
 import { UserProvider } from "@/context/user-context";
+import { useSession } from "next-auth/react";
 import { redirect } from "next/navigation";
+import useSWR from "swr";
 
 
 export default function RootLayout({ children, params }) {

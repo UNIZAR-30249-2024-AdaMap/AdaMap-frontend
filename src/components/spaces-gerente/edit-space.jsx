@@ -19,7 +19,7 @@ import {
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { buttonVariants } from '@/components/ui/button'
-import { Category, Propietarios, tipoUso } from '@/lib/constants'
+import { Category, Propietarios, tipoUso, Departamentos } from '@/lib/constants'
 import { Textarea } from "@/components/ui/textarea"
 import { LuClipboardEdit } from "react-icons/lu"
 import { mutate } from 'swr'
@@ -49,14 +49,13 @@ export function DialogEditSpace({
   tipoEspacioReserva,
   propietarios,
   idEspacio,
-  idNombre,
-  form,
-  setter,
+  idNombre
 }) {
-  const [open, setOpen] = useState(false);
-  const [selectedSpaces, setSelectedSpaces] = useState([]);
+  const [form, setForm] = useState({ reservable: reservable, categoria: tipoEspacioReserva, dueno: propietarios.departamento ? 'departamento' : propietarios.eina ? 'eina' : propietarios.personas ? 'personas' : null, propietarios: propietarios.propietario})
+  const setter = ({ key, value }) => setForm({ ...form, [key]: value })
 
   const { data: session } = useSession()
+  console.log(propietarios)
 
   // Función para eliminar un comentario
   const handleSubmit = async (e) => {
@@ -66,10 +65,12 @@ export function DialogEditSpace({
     console.log('categoria: ', tipoEspacioReserva);
     console.log('propietarios: ', propietarios);
 
+    console.log(form)
+
     try {
 
       // CAMBIAR RESERVAVILIDAD
-      if (reservable !== form.reservable && form.reservable !== null) {
+      if (reservable !== form.reservable) {
         console.log("ENTRAN EN CAMBIAR CATEGORIAERVABILIDAD");
         console.log(form.reservable)
         console.log(reservable !== null)
@@ -87,9 +88,12 @@ export function DialogEditSpace({
                   'Authorization': `Bearer ${session?.accessToken}` // Ajusta esto según cómo manejes la autenticación
                 }
               })
-                .then(() => {
-                  mutate(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/espacios/buscar?`)
+                .then(async(res) => {
+                  mutate(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/espacios/buscar`)
+                  if(res.status === 200)
                   resolve()
+                else  
+                  reject(await res.text())
                 })
                 .catch((error) => {
                   console.log(error)
@@ -102,12 +106,12 @@ export function DialogEditSpace({
         toast.promise(cambiarReservabilidad, {
           loading: 'cargando...',
           success: () => 'funciona cambiarReservabilidad',
-          error: (error) => JSON.stringify(error)
+          error: (error) => error
         })
       }
 
       // Cambiar categoria
-      if (tipoEspacioReserva !== form.categoria && form.categoria !== null) {
+      if (tipoEspacioReserva !== form.categoria) {
         console.log("ENTRAN EN CAMBIAR CATEGORIA");
         const cambiarTipoReserva = () => {
           return new Promise((resolve, reject) => {
@@ -122,9 +126,12 @@ export function DialogEditSpace({
                   'Authorization': `Bearer ${session?.accessToken}` // Ajusta esto según cómo manejes la autenticación
                 }
               })
-                .then(() => {
-                  mutate(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/espacios/buscar?`)
+                .then(async(res) => {
+                  mutate(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/espacios/buscar`)
+                  if(res.status === 200)
                   resolve()
+                else  
+                  reject(await res.text())
                 })
                 .catch((error) => {
                   console.log(error)
@@ -137,19 +144,21 @@ export function DialogEditSpace({
         toast.promise(cambiarTipoReserva, {
           loading: 'cargando...',
           success: () => 'funciona cambiarTipoReserva',
-          error: (error) => JSON.stringify(error)
+          error: (error) => error
         })
       }
 
-      // Cambiar propietario
-      if (propietarios.sort().join('') !== selectedSpaces.sort().join('')) {
-        console.log("ENTRA EN CAMBIAR PROPIETARIO");
-        console.log("selectedSpaces", selectedSpaces)
-        console.log("selectedSpaces", selectedSpaces[0])
+      console.log(propietarios.propietario, form.propietarios)
 
-        if (selectedSpaces[0] === "EINA") {
+      // Cambiar propietario
+      if (propietarios.propietario !== form.propietarios || (form.dueno === 'eina' && form.propietarios[0] !== 'EINA')) {
+        console.log("ENTRA EN CAMBIAR PROPIETARIO");
+
+        console.log(form.dueno)
+
+        if (form.dueno === "eina") {
           console.log("entrando a eina")
-          const cambiarPropietario = () => {
+          const cambiarPropietarioEINA = () => {
             return new Promise((resolve, reject) => {
               (async () => {
 
@@ -162,9 +171,12 @@ export function DialogEditSpace({
                     'Authorization': `Bearer ${session?.accessToken}` // Ajusta esto según cómo manejes la autenticación
                   }
                 })
-                  .then(() => {
-                    mutate(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/espacios/buscar?`)
-                    resolve()
+                  .then(async(res) => {
+                    mutate(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/espacios/buscar`)
+                    if(res.status === 200)
+                      resolve()
+                    else  
+                      reject(await res.text())
                   })
                   .catch((error) => {
                     console.log(error)
@@ -174,31 +186,34 @@ export function DialogEditSpace({
             })
           }
 
-          toast.promise(cambiarPropietario, {
+          toast.promise(cambiarPropietarioEINA, {
             loading: 'cargando...',
             success: () => 'funciona cambiarTipoReserva',
-            error: (error) => JSON.stringify(error)
+            error: (error) => error
           })
 
 
         }
-        else if (selectedSpaces[0] === "DIIS" || selectedSpaces[0] === "DIEC") {
-          const cambiarPropietario = () => {
+        else if (form.dueno === 'departamento') {
+          const cambiarPropietarioDepartamento = () => {
             return new Promise((resolve, reject) => {
               (async () => {
 
-                console.log("URL ", `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/espacios/edit/${idEspacio}/propietario/departamento/${selectedSpaces[0]}`)
+                console.log("URL ", `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/espacios/edit/${idEspacio}/propietario/departamento/${form.propietarios[0]}`)
 
-                await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/espacios/edit/${idEspacio}/propietario/departamento/${selectedSpaces[0]}`, {
+                await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/espacios/edit/${idEspacio}/propietario/departamento/${form.propietarios[0]}`, {
                   method: 'PUT',
                   headers: {
                     'Content-Type': 'application/json',
                     'Authorization': `Bearer ${session?.accessToken}` // Ajusta esto según cómo manejes la autenticación
                   }
                 })
-                  .then(() => {
-                    mutate(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/espacios/buscar?`)
-                    resolve()
+                  .then(async(res) => {
+                    mutate(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/espacios/buscar`)
+                    if(res.status === 200)
+                      resolve()
+                    else  
+                      reject(await res.text())
                   })
                   .catch((error) => {
                     console.log(error)
@@ -208,13 +223,13 @@ export function DialogEditSpace({
             })
           }
 
-          toast.promise(cambiarPropietario, {
+          toast.promise(cambiarPropietarioDepartamento, {
             loading: 'cargando...',
             success: () => 'funciona cambiarTipoReserva',
-            error: (error) => JSON.stringify(error)
+            error: (error) => error
           })
           
-        } else if (selectedSpaces.includes('Investigador contratado') || selectedSpaces.includes('Docente investigador') ){
+        } else {
           const cambiarPropietario = () => {
             return new Promise((resolve, reject) => {
               (async () => {
@@ -227,11 +242,14 @@ export function DialogEditSpace({
                     'Content-Type': 'application/json',
                     'Authorization': `Bearer ${session?.accessToken}` // Ajusta esto según cómo manejes la autenticación
                   },
-                  body: JSON.stringify(selectedSpaces)
+                  body: JSON.stringify(form.propietarios)
                 })
-                  .then(() => {
-                    mutate(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/espacios/buscar?`)
-                    resolve()
+                  .then(async(res) => {
+                    mutate(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/espacios/buscar`)
+                    if(res.status === 200)
+                      resolve()
+                    else  
+                      reject(await res.text())
                   })
                   .catch((error) => {
                     console.log(error)
@@ -244,7 +262,7 @@ export function DialogEditSpace({
           toast.promise(cambiarPropietario, {
             loading: 'cargando...',
             success: () => 'funciona cambiarTipoReserva',
-            error: (error) => JSON.stringify(error)
+            error: (error) => error
           })
         }
       }
@@ -257,18 +275,6 @@ export function DialogEditSpace({
       toast.error(path[0] + ': ' + message)
     }
   }
-
-  const toggleSelection = (title) => {
-    console.log(title)
-    setSelectedSpaces(prev => {
-      const currentIndex = prev.indexOf(title);
-      if (currentIndex === -1) {
-        return [...prev, title];
-      } else {
-        return prev.filter((item) => item !== title);
-      }
-    });
-  };
 
   return (
     <Dialog key={index}>
@@ -285,12 +291,12 @@ export function DialogEditSpace({
             <DialogDescription>Puedes modificar los siguientes valores.</DialogDescription>
           </DialogHeader>
           <div className="grid gap-4 py-1">
-            {reservable === "Sí" &&
+            {reservable === "Si" &&
               <div className="items-center gap-4 space-y-1">
                 <Label htmlFor="name" className="text-right">Categoría</Label>
                 <Select onValueChange={categoria => setter({ key: 'categoria', value: categoria })}>
                   <SelectTrigger >
-                    <SelectValue placeholder={tipoEspacioReserva} />
+                    <SelectValue placeholder={tipoEspacioReserva.charAt(0) + tipoEspacioReserva.slice(1).toLowerCase()} />
                   </SelectTrigger>
                   <SelectContent>
                     <SelectGroup>
@@ -308,55 +314,59 @@ export function DialogEditSpace({
             }
 
             <div className="items-center gap-4 space-y-1">
-              <Popover
-                className="w-full mx-auto"
-                open={open}
-                onOpenChange={setOpen}
-              >
-                <div className="flex flex-col space-y-2 w-full">
-                  <Label>Propietarios</Label>
-                  <PopoverTrigger asChild>
-                    <Button
-                      variant="outline"
-                      role="combobox"
-                      aria-expanded={open}
-                    >
-                      <div className="flex justify-between space-x-20 items-center text-sm overflow-hidden">
-                        <p className="font-light opacity-75">
-                          Selecciona los propietarios
-                        </p>
-                        <LuChevronsUpDown className="h-4 w-4 shrink-0 opacity-50" />
-                      </div>
-                    </Button>
-                  </PopoverTrigger>
-                </div>
-                <PopoverContent className="w-full" align="center">
-                  <Command>
-                    <CommandList>
-                      <CommandGroup>
-                        <div className="flex flex-col items-center gap-2">
-                          {Propietarios?.map((uso, index) => (
-                            <Button
-                              variant="adaMap"
-                              key={index}
-                              onClick={() => toggleSelection(uso.title)}
-                              className={cn(
-                                "w-full text-sm",
-                                selectedSpaces.includes(uso.title)
-                                  ? "bg-custom-AdaMapBlue text-white"
-                                  : "bg-gray-200 text-black"
-                              )}
-                            >
-                              {uso.title}
-                            </Button>
-                          ))}
-                        </div>
-                      </CommandGroup>
-                    </CommandList>
-                  </Command>
-                </PopoverContent>
-              </Popover>
+                <Label htmlFor="name" className="text-right">Propietarios</Label>
+              <Select onValueChange={categoria => setter({ key: 'dueno', value: categoria })
+              }>
+                  <SelectTrigger >
+                    <SelectValue placeholder={propietarios.eina ? 'Eina' : propietarios.departamento ? 'Departamento' : propietarios.personas ? 'Personas' : null} />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectGroup>
+                      {Propietarios.map((uso, index) => (
+                        <SelectItem
+                          key={index}
+                          value={uso.value}
+                          onSelect={(value) => console.log(value)}
+                        >{uso.title}</SelectItem>
+                      ))}
+                    </SelectGroup>
+                  </SelectContent>
+                </Select>
             </div>
+            
+            {form.dueno === 'departamento' &&
+            <div className="items-center gap-4 space-y-1">
+                <Label htmlFor="name" className="text-right">Departamento</Label>
+                <Select onValueChange={categoria => setter({ key: 'propietarios', value: [categoria] })}>
+                  <SelectTrigger >
+                    <SelectValue placeholder={propietarios.propietario} />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectGroup>
+                      {Departamentos.map((uso, index) => (
+                        <SelectItem
+                          key={index}
+                          value={uso.value}
+                          onSelect={(value) => console.log(value)}
+                        >{uso.title}</SelectItem>
+                      ))}
+                    </SelectGroup>
+                  </SelectContent>
+                </Select>
+              </div>}
+            
+            {form.dueno === 'personas' &&
+            <div className="items-center gap-4 space-y-1">
+                <Label htmlFor="name" className="text-right">Personas</Label>
+                <Input
+                  id="correo"
+                  placeholder={form?.propietarios?.join(', ')}
+                  type="text"
+                  autoCorrect="off"
+                  onChange={(e) => {setter({ key: 'propietarios', value: e.target.value.split(",").map(elemento => elemento.trim()) })}}
+                />
+              </div>}
+            
             <div className="items-center gap-4 space-y-1">
               <Label htmlFor="name" className="text-right">Reservable</Label>
               <Select onValueChange={reservable => setter({ key: 'reservable', value: reservable })}>
@@ -376,7 +386,7 @@ export function DialogEditSpace({
               </Select>
             </div>
           </div>
-          <DialogClose className="mt-3">
+          <DialogClose asChild className="mt-3">
             <Button type="submit" className={buttonVariants({ variant: 'adaMap' })}>Guardar</Button>
           </DialogClose>
         </form>

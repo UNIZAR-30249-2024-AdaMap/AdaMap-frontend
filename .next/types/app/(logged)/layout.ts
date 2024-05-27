@@ -1,4 +1,4 @@
-// File: /home/raul/Escritorio/UNIVERSIDAD/5-Agno/Cuatri2/Laboratorio IW/Proyecto/AdaMap-frontend/src/app/(logged)/layout.js
+// File: /Users/jaime/Documents/UNI/LABIS/AdaMap-frontend/src/app/(logged)/layout.js
 import * as entry from '../../../../src/app/(logged)/layout.js'
 import type { ResolvingMetadata, ResolvingViewport } from 'next/dist/lib/metadata/types/metadata-interface.js'
 

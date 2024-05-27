@@ -77,23 +77,26 @@ export const Planta = [
 
 export const Propietarios = [
   {
-    title: 'DIIS', 
-    value: 'diis'
+    title: 'Departamento', 
+    value: 'departamento'
   },
   {
-    title: 'DIEC', 
-    value: 'diec'
+    title: 'Personas', 
+    value: 'personas'
   },
   {
     title: 'EINA', 
     value: 'eina'
   },
+]
+
+export const Departamentos = [
   {
-    title: 'Investigador contratado', 
-    value: 'investigador-contratado'
+    title: 'DIIS', 
+    value: 'DIIS'
   },
   {
-    title: 'Docente investigador', 
-    value: 'docente-investigador'
+    title: 'DIEC', 
+    value: 'DIEC'
   }
 ]

@@ -72,11 +72,14 @@ export function DialogReserva({
                 fecha: form.fecha,
               })
             })
-              .then(() => {
-                resolve()
+              .then(async(res) => {
+                if(res.status === 200)
+                  resolve()
+                else  
+                  reject(await res.text())
               })
               .catch((error) => {
-                console.log(error)
+                console.log('ha petado aqui', error)
                 reject(error)
               })
           })()
@@ -87,7 +90,7 @@ export function DialogReserva({
         loading: "Cargando",
         success: () => "Reserva realizada con éxito",
         error: (error) => {
-          return "Error"
+          return error
         }
       })
       e.target.reset()

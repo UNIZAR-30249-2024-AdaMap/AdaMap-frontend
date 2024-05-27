@@ -13,14 +13,12 @@ import { mutate } from 'swr'
 
 export function SpacesGerente() {
   const [searchTerm, setSearchTerm] = useState('')
-  const [form, setForm] = useState({ reservable: null, categoria: null})
-  const setter = ({ key, value }) => setForm({ ...form, [key]: value })
 
 
   const { data: session } = useSession()
 
 
-  const { data: espacios, isLoading } = useSWR(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/espacios/buscar?`, (url) => fetch(url, {
+  const { data: espacios, isLoading } = useSWR(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/espacios/buscar`, (url) => fetch(url, {
     headers: {
       Authorization: `Bearer ${session?.accessToken}`
     }
@@ -88,8 +86,8 @@ export function SpacesGerente() {
                 <TableCell>{space.reservable ? "Sí" : "No"}</TableCell>
                 <TableCell>
                   <div className="flex items-center gap-2">
-                    <DialogEditSpace index={index} reservable={space.reservable ? "Sí" : "No"} tipoEspacioReserva={space.tipoEspacioParaReserva.charAt(0) + space.tipoEspacioParaReserva.slice(1).toLowerCase()} 
-                    propietarios={space.propietarioEspacio.propietario} idEspacio={space.idEspacio} idNombre={space.nombre} form={form} setter={setter} />
+                    <DialogEditSpace index={index} reservable={space.reservable ? "Si" : "No"} tipoEspacioReserva={space.tipoEspacioParaReserva} 
+                    propietarios={space.propietarioEspacio} idEspacio={space.idEspacio} idNombre={space.nombre} />
                     {/* <Button className="text-red-500 hover:text-red-600" size="icon" variant="ghost">
                       <LuTrash className="h-4 w-4" />
                       <span className="sr-only">Eliminar</span>

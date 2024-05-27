@@ -58,8 +58,8 @@ export function AllSpaces() {
             />
             <DialogFileters form={form} setter={setter} setFilteredUrl={setFilteredUrl} />
           </div>
-          <DialogReservaAutomatica filteredSpaces={filteredSpaces} setFilteredUrl={setFilteredUrl} />
-          <DialogReservaVariosEspacios filteredSpaces={filteredSpaces} setFilteredUrl={setFilteredUrl} />
+          <DialogReservaAutomatica />
+          <DialogReservaVariosEspacios filteredSpaces={filteredSpaces} />
         </div>
 
       </div>

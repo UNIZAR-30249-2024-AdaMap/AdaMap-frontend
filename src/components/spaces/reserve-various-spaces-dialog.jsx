@@ -43,9 +43,7 @@ import { useSession } from 'next-auth/react'
 
 export function DialogReservaVariosEspacios({
   filteredSpaces,
-  setFilteredUrl,
 }) {
-  //console.log(filteredSpaces);
 
   const [form, setForm] = useState({
     tipoUso: null,
@@ -61,9 +59,6 @@ export function DialogReservaVariosEspacios({
   const [open, setOpen] = useState(false);
 
   const { data: session } = useSession()
-
-  
-  //console.log(selectedSpaces);
 
   const toggleSelection = (title) => {
     setSelectedSpaces(prev => {
@@ -104,8 +99,11 @@ export function DialogReservaVariosEspacios({
                 fecha: form.fecha,
               })
             })
-              .then(() => {
-                resolve()
+              .then(async(res) => {
+                if(res.status === 200)
+                  resolve()
+                else  
+                  reject(await res.text())
               })
               .catch((error) => {
                 console.log(error)
@@ -119,7 +117,7 @@ export function DialogReservaVariosEspacios({
         loading: "Cargando",
         success: () => "Reserva realizada con éxito",
         error: (error) => {
-          return "Error"
+          return error
         }
       })
       e.target.reset()
