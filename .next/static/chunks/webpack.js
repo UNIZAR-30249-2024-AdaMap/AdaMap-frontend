@@ -163,7 +163,7 @@
 /******/ 		// This function allow to reference async chunks
 /******/ 		__webpack_require__.u = function(chunkId) {
 /******/ 			// return url for filenames based on template
-/******/ 			return undefined;
+/******/ 			return "static/chunks/" + chunkId + ".js";
 /******/ 		};
 /******/ 	}();
 /******/ 	
@@ -181,7 +181,7 @@
 /******/ 		// This function allow to reference async chunks
 /******/ 		__webpack_require__.miniCssF = function(chunkId) {
 /******/ 			// return url for filenames based on template
-/******/ 			return undefined;
+/******/ 			return "static/css/" + chunkId + ".css";
 /******/ 		};
 /******/ 	}();
 /******/ 	
@@ -192,7 +192,7 @@
 /******/ 	
 /******/ 	/* webpack/runtime/getFullHash */
 /******/ 	!function() {
-/******/ 		__webpack_require__.h = function() { return "17363ca4a41bd555"; }
+/******/ 		__webpack_require__.h = function() { return "c11baaad865d5816"; }
 /******/ 	}();
 /******/ 	
 /******/ 	/* webpack/runtime/global */
@@ -785,7 +785,23 @@
 /******/ 				createStylesheet(chunkId, fullhref, resolve, reject);
 /******/ 			});
 /******/ 		}
-/******/ 		// no chunk loading
+/******/ 		// object to store loaded CSS chunks
+/******/ 		var installedCssChunks = {
+/******/ 			"webpack": 0
+/******/ 		};
+/******/ 		
+/******/ 		__webpack_require__.f.miniCss = function(chunkId, promises) {
+/******/ 			var cssChunks = {"css-node_modules_leaflet-defaulticon-compatibility_dist_leaflet-defaulticon-compatibility_css-c09edb":1};
+/******/ 			if(installedCssChunks[chunkId]) promises.push(installedCssChunks[chunkId]);
+/******/ 			else if(installedCssChunks[chunkId] !== 0 && cssChunks[chunkId]) {
+/******/ 				promises.push(installedCssChunks[chunkId] = loadStylesheet(chunkId).then(function() {
+/******/ 					installedCssChunks[chunkId] = 0;
+/******/ 				}, function(e) {
+/******/ 					delete installedCssChunks[chunkId];
+/******/ 					throw e;
+/******/ 				}));
+/******/ 			}
+/******/ 		};
 /******/ 		
 /******/ 		var oldTags = [];
 /******/ 		var newTags = [];
@@ -842,7 +858,7 @@
 /******/ 					if(installedChunkData) {
 /******/ 						promises.push(installedChunkData[2]);
 /******/ 					} else {
-/******/ 						if(!/^(css\-src_styles_globals_css|webpack)$/.test(chunkId)) {
+/******/ 						if(!/^(css\-(node_modules_leaflet\-defaulticon\-compatibility_dist_leaflet\-defaulticon\-compatibility_css\-c09edb|src_styles_globals_css)|webpack)$/.test(chunkId)) {
 /******/ 							// setup Promise in chunk cache
 /******/ 							var promise = new Promise(function(resolve, reject) { installedChunkData = installedChunks[chunkId] = [resolve, reject]; });
 /******/ 							promises.push(installedChunkData[2] = promise);
