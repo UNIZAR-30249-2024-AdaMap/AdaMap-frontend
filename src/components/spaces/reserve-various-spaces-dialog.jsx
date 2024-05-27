@@ -40,6 +40,7 @@ import { LuChevronsUpDown, LuCheck } from "react-icons/lu";
 import { toast } from "sonner";
 import { useSession } from 'next-auth/react'
 import { useUser } from "@/context/user-context";
+import { ScrollArea, ScrollBar } from "../ui/scroll-area";
 
 
 export function DialogReservaVariosEspacios({
@@ -174,30 +175,28 @@ export function DialogReservaVariosEspacios({
                     </Button>
                   </PopoverTrigger>
                 </div>
-                <PopoverContent className="w-full" align="center">
-                  <Command>
-                    <CommandList>
-                      <CommandGroup>
-                        <div className="flex flex-col items-center gap-2">
-                          {filteredSpaces?.map((espacio) => (
-                            <Button
-                              variant="adaMap"
-                              key={espacio.nombre}
-                              onClick={() => toggleSelection(espacio.idEspacio)}
-                              className={cn(
-                                "w-full text-sm",
-                                selectedSpaces.includes(espacio.idEspacio)
-                                  ? "bg-custom-AdaMapBlue text-white"
-                                  : "bg-gray-200 text-black"
-                              )}
-                            >
-                              {espacio.nombre}
-                            </Button>
-                          ))}
-                        </div>
-                      </CommandGroup>
-                    </CommandList>
-                  </Command>
+                <PopoverContent className="w-full flex flex-row" align="center">
+                  <ScrollArea className="flex gap-2 max-h-72 max-w-72 overflow-scroll">
+                    <div className="flex flex-col w-full gap-2 mx-4">
+                      {filteredSpaces?.map((espacio) => (
+                              <Button
+                                variant="adaMap"
+                                key={espacio.nombre}
+                                onClick={() => toggleSelection(espacio.idEspacio)}
+                                className={cn(
+                                  "max-w-64 text-sm",
+                                  selectedSpaces.includes(espacio.idEspacio)
+                                    ? "bg-custom-AdaMapBlue text-white"
+                                    : "bg-gray-200 text-black"
+                                )}
+                              >
+                                {espacio.nombre}
+                              </Button>
+                            ))}
+                    </div>
+                            
+                            <ScrollBar />
+                        </ScrollArea>
                 </PopoverContent>
               </Popover>
             </div>

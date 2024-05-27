@@ -36,7 +36,7 @@ export function AllSpaces() {
   console.log(espacios);
 
   const filteredSpaces = espacios?.filter(espacio => {
-    return espacio.nombre.toLowerCase().includes(searchTerm.toLowerCase())
+    return espacio.idEspacio.toLowerCase().includes(searchTerm.toLowerCase())
   });
 
   const handleSearchChange = (e) => {
@@ -52,7 +52,7 @@ export function AllSpaces() {
           <div className="flex items-center">
             <LuSearch className="w-10 h-10 mr-2 text-gray-500" />
             <Input
-              placeholder="Busca el espacio"
+              placeholder="Busca por id"
               className="text-base"
               value={searchTerm}
               onChange={handleSearchChange}
