@@ -1,8 +1,13 @@
-import { AllReservations } from "@/components/reservations/all-reservations"
+'use client'
 
-const rol = "Gerente"
+import { AllReservations } from "@/components/reservations/all-reservations"
+import { useUser } from "@/context/user-context";
 
 export default function ReservationsPage() {
+
+  const { user } = useUser()
+  const rol = user?.roles.join(', ').toLowerCase();
+
   return (
     <div className="container px-1 py-20">
       <div className="space-y-2">

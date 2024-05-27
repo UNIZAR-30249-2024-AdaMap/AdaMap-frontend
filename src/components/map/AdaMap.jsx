@@ -39,10 +39,10 @@ export default function AdaMap() {
   };
 
   const createPopupContent = (properties) => {
-    return `<h1>Nombre: ${properties.Nombre}</h1>
-            <p>Id espacio: ${properties.idEspacio}</p>
+    return `<h1>Nombre: ${properties.nombre}</h1>
+            <p>Id espacio: ${properties.id_espacio}</p>
             <p>Edificio: ${properties.EDIFICIO}</p>
-            <p>Categoría: ${properties.tipoEspacioDefecto}</p>
+            <p>Categoría: ${properties.tipo_espacio_defecto}</p>
             <p>Tamaño: ${properties.tamano} m²</p>`;
   };
 
@@ -52,7 +52,7 @@ export default function AdaMap() {
     layer.on({
       click: () => {
         console.log('Feature properties:', feature.properties);
-        setSelectedFeature(feature.properties.idEspacio);
+        setSelectedFeature(feature.properties.id_espacio);
         var popupContent = createPopupContent(feature.properties);
         var popup = L.popup()
           .setLatLng(layer.getBounds().getCenter())
@@ -64,7 +64,7 @@ export default function AdaMap() {
   };
 
   const featureStyle = (feature) => {
-    if (selectedFeature === feature.properties.idEspacio) {
+    if (selectedFeature === feature.properties.id_espacio) {
       return {
         weight: 2,
         color: '#134778',
@@ -72,7 +72,7 @@ export default function AdaMap() {
         fillOpacity: 0.5
       };
     } else {
-      switch (feature.properties.tipoEspacioDefecto) {
+      switch (feature.properties.tipo_espacio_defecto) {
         case 'AULA': return { color: "#ff0000", fillColor: "#ff0000", weight: 2, fillOpacity: 0.5 };
         case 'SEMINARIO': return { color: "#00ff00", fillColor: "#00ff00", weight: 2, fillOpacity: 0.5 };
         case 'LABORATORIO': return { color: "#0000ff", fillColor: "#0000ff", weight: 2, fillOpacity: 0.5 };

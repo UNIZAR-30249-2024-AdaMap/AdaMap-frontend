@@ -8,10 +8,6 @@ export const NavBarItems = [
     href: '/spaces'
   },
   {
-    title: 'Mis reservas',
-    href: '/my-reservations'
-  },
-  {
     title: 'Mapa',
     href: '/map'
   }
@@ -36,68 +32,71 @@ export const tipoUso = [
 export const Category = [
   {
     title: 'Aula', 
-    value: 'aula'
+    value: 'AULA'
   },
   {
     title: 'Laboratorio', 
-    value: 'laboratorio'
+    value: 'LABORATORIO'
   },
   {
     title: 'Seminario', 
-    value: 'seminario'
+    value: 'SEMINARIO'
   },
   {
     title: 'Sala Común', 
-    value: 'sala-comun'
+    value: 'SALA_COMUN'
   },
   {
     title: 'Despacho', 
-    value: 'despacho'
+    value: 'DESPACHO'
   }
 ]
 
 export const Planta = [
   {
     title: 'Planta 0', 
-    value: 'planta-0'
+    value: '0'
   },
   {
     title: 'Planta 1', 
-    value: 'planta-1'
+    value: '1'
   },
   {
     title: 'Planta 2', 
-    value: 'planta-2'
+    value: '2'
   },
   {
     title: 'Planta 3', 
-    value: 'planta-3'
+    value: '3'
   },
   {
     title: 'Planta 4', 
-    value: 'planta-4'
+    value: '4'
   }
 ]
 
 export const Propietarios = [
   {
-    title: 'DIIS', 
-    value: 'diis'
+    title: 'Departamento', 
+    value: 'departamento'
   },
   {
-    title: 'DIEC', 
-    value: 'diec'
+    title: 'Personas', 
+    value: 'personas'
   },
   {
     title: 'EINA', 
     value: 'eina'
   },
+]
+
+export const Departamentos = [
   {
-    title: 'Investigador contratado', 
-    value: 'investigador-contratado'
+    title: 'DIIS', 
+    value: 'DIIS'
   },
   {
-    title: 'Docente investigador', 
-    value: 'docente-investigador'
+    title: 'DIEC', 
+    value: 'DIEC'
   }
 ]

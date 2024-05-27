@@ -1,8 +1,14 @@
-import { AllSpaces } from "@/components/spaces/all-spaces"
+'use client'
 
-const rol = "Gerente"
+import { AllSpaces } from "@/components/spaces/all-spaces"
+import { useUser } from "@/context/user-context";
+
 
 export default function SpacesPage() {
+
+  const { user } = useUser()
+  const rol = user?.roles.join(', ').toLowerCase();
+
   return (
     <div className="container px-1 py-20">
       <div className="space-y-2">

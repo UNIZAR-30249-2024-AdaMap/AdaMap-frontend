@@ -5,54 +5,82 @@ import { TableHead, TableRow, TableHeader, TableCell, TableBody, Table } from "@
 import { Button } from "@/components/ui/button"
 import { LuSearch, LuTrash, LuClipboardEdit } from "react-icons/lu"
 import { DialogEditReserva } from "@/components/reservations/edit-dialog"
+import { useSession } from 'next-auth/react'
+import useSWR from 'swr'
+import { toast } from 'sonner'
+import { mutate } from 'swr'
+import { useUser } from "@/context/user-context";
 
-const reservationsData = [
-  {
-    id: "1",
-    nombre: "Sala de Juntas 1",
-    usuario: "jdoe@empresa.com",
-    fecha: "2023-04-15",
-    horaInicio: "09:00",
-    horaFin: "11:00",
-    aforo: "10",
-    tipoUso: "Reunión",
-    descripcion: "Reunión del equipo de ventas"
-  },
-  {
-    id: "2",
-    nombre: "Auditorio Principal",
-    usuario: "mgarcia@empres.com",
-    fecha: "2023-04-20",
-    horaInicio: "14:00",
-    horaFin: "16:00",
-    aforo: "50",
-    tipoUso: "Conferencia",
-    descripcion: "Conferencia de lanzamiento de producto"
-  },
-  {
-    id: "3",
-    nombre: "Sala de Capacitación",
-    usuario: "jsmith@empresa.com",
-    fecha: "2023-04-25",
-    horaInicio: "08:30",
-    horaFin: "12:30",
-    aforo: "20",
-    tipoUso: "Capacitación",
-    descripcion: "Capacitación de nuevos empleados"
-  }
-]
 
 export function AllReservations({ rol }) {
   const [searchTerm, setSearchTerm] = useState('')
 
+  const { user } = useUser()
+  const { data: session } = useSession()
 
-  const filteredSpaces = reservationsData.filter(reservationsData => {
-    return reservationsData.usuario.toLowerCase().includes(searchTerm.toLowerCase())
-  });
+  const { data: reservasVivas, isLoading } = useSWR(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/reservas/reservasVivas`, (url) => fetch(url, {
+    headers: {
+      Authorization: `Bearer ${user.correo}`
+    }
+  }).then(res => res.json()))
+
+
+  console.log("reservasVivase", reservasVivas)
+
+  const filteredReservas = Array.isArray(reservasVivas)
+    ? reservasVivas.filter(reserva => reserva.persona.nombre.toLowerCase().includes(searchTerm.toLowerCase()))
+    : []
+
+  // const filteredReservas = []
 
   const handleSearchChange = (e) => {
     setSearchTerm(e.target.value);
   };
+
+  const handleDelete = async (id) => {
+    console.log("id", id)
+    try {
+      const deleteReserva = () => {
+        return new Promise((resolve, reject) => {
+          (async () => {
+            await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/reservas/eliminarReserva/${id}`, {
+              method: 'DELETE',
+              headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${user.correo}` // Ajusta esto según cómo manejes la autenticación
+              }
+            })
+              .then(() => {
+                mutate(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/reservas/reservasVivas`)
+                resolve()
+              })
+              .catch((error) => {
+                console.log(error)
+                reject(error)
+              })
+          })()
+        })
+      }
+      toast.promise(deleteReserva, {
+        loading: "Cargando",
+        success: () =>  "Reserva eliminada con éxito",
+        error: (error) => {
+          return "Error"
+        }
+      })
+
+    } catch (error) {
+      const { path, message } = JSON.parse(error.message)[0]
+      toast.error(path[0] + ': ' + message)
+    }
+  }
+
+  const formatDate = (dateString) => {
+    const date = new Date(dateString)
+    return date.toISOString().split('T')[0]
+  }
+
+  if (isLoading) return null
 
   return (
     <div className="flex flex-col w-full">
@@ -67,45 +95,50 @@ export function AllReservations({ rol }) {
           />
         </div>
       </div>
-      <div className="border rounded-b-lg overflow-auto">
+      <div className="border rounded-b-lg overflow-hidden ">
         <Table>
           <TableHeader>
             <TableRow>
               <TableHead>Id</TableHead>
-              <TableHead>Espacio</TableHead>
+              <TableHead>Espacio/s</TableHead>
               <TableHead>Usuario</TableHead>
               <TableHead>Fecha</TableHead>
               <TableHead>Hora Inicio</TableHead>
-              <TableHead>Hora Fin</TableHead>
-              <TableHead>Aforo</TableHead>
+              <TableHead>Duración</TableHead>
+              <TableHead>Asistentes</TableHead>
               <TableHead>Tipo de Uso</TableHead>
               <TableHead>Descripción</TableHead>
               <TableHead className="w-[100px]">Acciones</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
-            {filteredSpaces.map((reservation, index) => (
-                <TableRow key={index}>
-                  <TableCell>{reservation.id}</TableCell>
-                  <TableCell>{reservation.nombre}</TableCell>
-                  <TableCell>{reservation.usuario}</TableCell>
-                  <TableCell>{reservation.fecha}</TableCell>
-                  <TableCell>{reservation.horaInicio}</TableCell>
-                  <TableCell>{reservation.horaFin}</TableCell>
-                  <TableCell>{reservation.aforo}</TableCell>
-                  <TableCell>{reservation.tipoUso}</TableCell>
-                  <TableCell>{reservation.descripcion}</TableCell>
-                  <TableCell>
-                    <div className="flex items-center gap-2">
-                      <Button className="text-red-500 hover:text-red-600" size="icon" variant="ghost">
-                        <LuTrash className="h-4 w-4" />
-                        <span className="sr-only">Eliminar</span>
-                      </Button>
-                    </div>
-                  </TableCell>
-                </TableRow>
-              ))}
-            
+            {filteredReservas.map((reservation, index) => (
+              <TableRow key={index}>
+                <TableCell>{reservation.idReserva}</TableCell>
+                <TableCell>
+                  {reservation.espacios?.map((espacio, idx) => (
+                    <div key={idx}>{espacio.nombre}</div>
+                  ))}
+                </TableCell>
+                <TableCell>{reservation.persona.nombre}</TableCell>
+                <TableCell>{formatDate(reservation.fecha)}</TableCell>
+                <TableCell>{reservation.horaInicio}</TableCell>
+                <TableCell>{reservation.duracion} min.</TableCell>
+                <TableCell>{reservation.numAsistentes}</TableCell>
+                <TableCell>{reservation.tipoUso}</TableCell>
+                <TableCell>{reservation.descripcion}</TableCell>
+                <TableCell>
+                  <div className="flex items-center gap-2">
+                    <Button className="text-red-500 hover:text-red-600" size="icon"
+                      variant="ghost" onClick={() => handleDelete(reservation.idReserva)}>
+                      <LuTrash className="h-4 w-4" />
+                      <span className="sr-only">Eliminar</span>
+                    </Button>
+                  </div>
+                </TableCell>
+              </TableRow>
+            ))}
+
           </TableBody>
         </Table>
       </div>

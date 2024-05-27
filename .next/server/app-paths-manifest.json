@@ -1,4 +1,6 @@
 {
+  "/api/auth/[...nextauth]/route": "app/api/auth/[...nextauth]/route.js",
   "/favicon.ico/route": "app/favicon.ico/route.js",
-  "/(logged)/map/page": "app/(logged)/map/page.js"
+  "/sign-in/page": "app/sign-in/page.js",
+  "/(logged)/spaces/page": "app/(logged)/spaces/page.js"
 }

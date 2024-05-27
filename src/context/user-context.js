@@ -4,23 +4,16 @@ import React, { useContext } from 'react'
 
 const UserContext = React.createContext()
 
+// Hook para obtener la información del usuario actual
 export function useUser () {
   return useContext(UserContext)
 }
 
-const defaultUser = {
-  username: 'johndoe',
-  firstname: 'John',
-  lastname: 'Doe',
-  email: 'johndoe@example.com',
-  avatar: '/assets/avatars/animals/1.webp',
-  role: 'member'
-}
-
+// Proveedor de usuario para la aplicación
 export function UserProvider ({ children, user }) {
   return (
     <UserContext.Provider value={{
-      user: user || defaultUser
+      user: user
     }}>
       {children}
     </UserContext.Provider>
